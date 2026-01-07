@@ -1,4 +1,5 @@
 ---
+name: fix
 description: Debug and fix bugs safely using a structured agent workflow
 ---
 
