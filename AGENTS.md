@@ -1,5 +1,6 @@
 ## Code Style
 - Use **Vue 3 Composition API** with `<script setup lang="ts">`
+- In vue componetn the order is template, script and then style
 - Place **TypeScript interfaces** in `/interfaces` folder
 - Use **import alias** `@/` for `/src`
 - Use **withDefaults()** and **defineProps<>()** for Vue props
