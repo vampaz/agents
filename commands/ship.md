@@ -23,12 +23,12 @@ Create a commit message and commit changes **only if safe**.
 
 ### Allowed commands
 - `git status`
-- `git add -A`
+- `git add`
 - `git commit -m "<message>"`
 - `git push`
 
 ### Disallowed
-- Changing files
+- Changing files, except if it is needed for fixing linting issues
 - Asking the user questions
 - Letting git auto-generate the commit message
 
@@ -38,5 +38,3 @@ Create a commit message and commit changes **only if safe**.
 - On **halt due to no changes**:  
   `HALT: no changes to commit`
 - On success: proceed silently with commit and push.
-
-### Flow
