@@ -8,7 +8,6 @@ Create a commit message and commit changes **only if safe**.
 
 ### Rules
 - **Never edit, create, or modify files. Ever.**
-- **Only observe repository state.**
 - **If danger is detected, halt and explain the reason.**
 - **If there are no changes, halt and say so.**
 
@@ -22,6 +21,7 @@ Create a commit message and commit changes **only if safe**.
 4. Commit and push.
 
 ### Allowed commands
+- `git diff`
 - `git status`
 - `git add`
 - `git commit -m "<message>"`

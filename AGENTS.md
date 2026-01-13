@@ -17,8 +17,7 @@
 - Use existing patterns and libraries (check `package.json`)
 - Follow existing component structure and naming
 - **Never add timeouts** when running e2e tests, use `page.waitForSelector` instead
-- During development we already have the dev server running at `https://local.notesauditor.ai`
-
+- During development we already have the dev server running. it usually runa at <repo>.<branch>.localhost. Check the vite config for details about the tls config
 ## Tools
 - **Build**: `npm run build`
 - **Lint**: `npm run lint`
@@ -39,7 +38,7 @@
 - **Never include** claude mentions in commit messages
 - **Never run builds** to check if it works without asking
 - **Focus**: Do exactly what's asked, and no more, unless you get the green light
-
+- After changing a test you always run the test
 ## Assumptions
 - The user knows their stuff; focus on being right and detailed
 - Good ideas matter more than who said them; back up your claims if needed
