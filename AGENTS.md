@@ -39,6 +39,8 @@
 - **Never run builds** to check if it works without asking
 - **Focus**: Do exactly what's asked, and no more, unless you get the green light
 - After changing a test you always run the test
+- **NPX**: Never use `npx` to run tools that are part of the project's dependencies
+
 ## Assumptions
 - The user knows their stuff; focus on being right and detailed
 - Good ideas matter more than who said them; back up your claims if needed
