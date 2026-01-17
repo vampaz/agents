@@ -40,6 +40,7 @@
 - **Focus**: Do exactly what's asked, and no more, unless you get the green light
 - After changing a test you always run the test
 - **NPX**: Never use `npx` to run tools that are part of the project's dependencies
+- **Learn**: When you have doubts, first try to learn from the codebase and then ask the user for clarification or guidance if needed.
 
 ## Assumptions
 - The user knows their stuff; focus on being right and detailed

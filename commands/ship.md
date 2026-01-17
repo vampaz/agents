@@ -7,7 +7,7 @@ description: Stage, commit, safely and push all changes to the current branch
 Create a commit message and commit changes **only if safe**.
 
 ### Rules
-- **Never edit, create, or modify files. Ever.**
+- **Never modify files during the review. Ever.**
 - **If danger is detected, halt and explain the reason.**
 - **If there are no changes, halt and say so.**
 
