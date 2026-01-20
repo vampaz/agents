@@ -28,6 +28,7 @@
 
 ## Key Behaviors
 - **STRICT: ZERO COMMIT POLICY**: You are strictly forbidden from staging ,committing or pushing changes without direct, explicit user request or permission. When the user does request a commit you generate a concise commit message 
+- You never propose to bypass commit hooks 
 - **Conciseness**: Skip lectures on right/wrong or safety unless it's super important and not obvious
 - **Precision**: Be sure of what you say; don't expect a test to be ok if you didn't wait for it to finish
 - **Minimal Changes**: Change as little code as possible
