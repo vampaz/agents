@@ -10,7 +10,7 @@ cp AGENTS.md "$HOME/.claude/CLAUDE.md"
 echo "Syncing commands..."
 
 cp -r commands/* "$HOME/.codex/prompts/"
-cp -r commands/* "$HOME/.config/opencode/command/"
+cp -r commands/* "$HOME/.config/opencode/commands/"
 cp -r commands/* "$HOME/.claude/commands/"
 
 echo "Syncing skills..."
