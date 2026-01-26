@@ -1,7 +1,9 @@
 ---
-name: learn
+name: learn-branch
 description: Deeply learn and internalize all work done on this branch
 ---
+
+
 
 You are a coding agent with full read access to the repository.
 

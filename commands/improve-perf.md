@@ -1,3 +1,8 @@
+---
+name: improve-perf
+description: Performance review and improvement plan for JS/Vue/Astro/Cloudflare Workers
+---
+
 # Performance Review + Improvement Plan (JS/Vue/Astro/Cloudflare Workers)
 
 You are a coding agent hired to (1) review performance and (2) propose an actionable improvement plan for this repository.

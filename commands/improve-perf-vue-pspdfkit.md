@@ -1,4 +1,17 @@
+---
+name: improve-perf-vue-pspdfkit
+description: Stage, commit, safely and push all changes to the current branch
+---
+
+
+---
+name: 'improve-perf-vue-pspdfkit'
+description: 'Performance review and improvement plan for Vue + PSPDFKit'
+---
+
 # Vue + PSPDFKit Performance Review + Improvement Plan
+
+
 
 You are a coding agent hired to (1) review performance and (2) propose an actionable improvement plan for a **Vue application that integrates PSPDFKit**.
 
