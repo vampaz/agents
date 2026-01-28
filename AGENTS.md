@@ -113,3 +113,5 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Unit test must be always fully green, failing tests get you fired
 - Never include claude mentions in commit messages
 - Never run builds to check if it works without asking
+- Github CLI is installed and you should use it for common tasks
+- Always use the latest version of the tools and libraries
