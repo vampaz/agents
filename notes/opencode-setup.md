@@ -2,12 +2,6 @@
 
 ## Confirmed binary path
 
-```
-/Users/yourname/.nvm/versions/node/v24.11.1/bin/opencode
-```
-
-## Other install paths (examples)
-
 - Homebrew (Apple Silicon): `/opt/homebrew/bin/opencode`
 - Homebrew (Intel): `/usr/local/bin/opencode`
 - npm global (default): `/usr/local/bin/opencode`
