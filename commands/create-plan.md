@@ -20,7 +20,7 @@ For each step, include:
 - **Verification**: The exact command to run (e.g., `npm run test -- path/to/file.spec.ts`).
 
 ## Output Format
-Save the plan to a new markdown file. The filename MUST be descriptive and reflect the plan's objective (e.g., `implement-user-auth.md` or `fix-memory-leak.md`).
+Save the plan to a new markdown file. The filename MUST be descriptive and reflect the plan's objective (e.g., `implement-user-auth.md` or `fix-memory-leak.md`).In most of my repos there is the temp-docs folder for these plans
 The plan must use a checklist format for both high-level phases and individual steps.
 
 # Plan: [Name]
