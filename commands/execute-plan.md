@@ -26,6 +26,6 @@ You are a senior software engineer. Execute the plan provided in $1. You must co
        - If tests pass: 
          1. Mark the step as `[x]` in $1.
          2. If all steps in the current phase are completed, mark the phase as `[x]` in $1.
-         3. Commit changes with a message like `feat: [step objective]` including the updated plan file.
+         3. Commit (during plan execution you have fullpermissions to stage andcommit) changes with a message like `feat: [step objective]` including the updated plan file.
    - **Re-Loop**: Immediately return to the start of the **Execution Loop** to process the next pending step. Do not wait for user input or stop unless the plan is finished.
 3. **Finalization**: Report total steps completed and any deviations.
