@@ -101,6 +101,7 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - After changing a test you always run the test
 - **NPX**: Never use `npx` to run tools that are part of the project's dependencies
 - **Learn**: When you have doubts, first try to learn from the codebase and then ask the user for clarification or guidance if needed.
+- **Changes**: Always keep in mind that me or another agent may change files. don't revert changes that weren't done by you, never. unless asked
 
 ## Assumptions
 - The user knows their stuff; focus on being right and detailed
