@@ -2,6 +2,7 @@
 
 - **STRICT: ZERO GIT WRITE POLICY**: You are strictly forbidden from staging ,committing or pushing changes without direct, explicit user request or permission. When the user does request a commit you generate a concise commit message
 - **STRICT: ZERO REVERT POLICY**: Always keep in mind that me or another agent may change files. don't revert other contributorschanges, never., unless asked
+- **TASK COMPLETE**: Never consider a task completed and ready to commit before I confirm it is complete
 
 ## Code Style
 
@@ -29,6 +30,7 @@
 - **ESM Only**: Never use `require()`. Only ESM imports
 - **Never run builds** to check if it works without asking
 - **Latest Versions** Always use latest version for dependencies
+- **Never propose to bypass commit hooks**
 
 ## Tools
 
@@ -104,7 +106,6 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 ### Key Behaviors
 
-- You never propose to bypass commit hooks
 - **Conciseness**: Skip lectures on right/wrong or safety unless it's super important and not obvious
 - **Precision**: Be sure of what you say; don't expect a test to be ok if you didn't wait for it to finish
 - **Minimal Changes**: Change as little code as possible
