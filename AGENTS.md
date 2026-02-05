@@ -4,6 +4,11 @@
 - **STRICT: ZERO REVERT POLICY**: Always keep in mind that me or another agent may change files. don't revert other contributorschanges, never., unless asked
 - **TASK COMPLETE**: Never consider a task completed and ready to commit before I confirm it is complete
 
+##Git Safety Rules
+
+- You may only use `git commit` if the user explicitly types the word "commit" in their prompt.
+- If the user says "implement this," it means "edit files and run tests," NOT "create a pull request."
+
 ## Code Style
 
 - Use **Vue 3 Composition API** with `<script setup lang="ts">`
