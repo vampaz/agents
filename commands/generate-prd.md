@@ -29,6 +29,7 @@ Output:
 - Each feature file must include: overview, users, flows, functional requirements, non-functional requirements, edge cases, analytics/telemetry, permissions/security, integrations, open questions, and traceability.
 - Use flat bullet lists (no nested bullets).
 - Add `Status: Tested (E2E)` with spec references, or `Status: Un-tested` if there is no E2E coverage.
+- Add Mermaid diagrams when they materially improve clarity (e.g., key flows, state transitions, or integrations). Keep diagrams minimal and directly tied to evidence.
 
 Process:
 - Work section by section according to the plan in `$ARGUMENTS`.
