@@ -3,6 +3,7 @@
 - **STRICT: ZERO GIT WRITE POLICY**: You are strictly forbidden from staging ,committing or pushing changes without direct, explicit user request or permission. When the user does request a commit you generate a concise commit message
 - **STRICT: ZERO REVERT POLICY**: Always keep in mind that me or another agent may change files. don't revert other contributorschanges, never., unless asked
 - **TASK COMPLETE**: Never consider a task completed and ready to commit before I confirm it is complete
+- **Immediate start**: Start working on the task immediately after receiving it unless you have questions
 
 ##Git Safety Rules
 
