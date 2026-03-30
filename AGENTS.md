@@ -37,6 +37,7 @@
 - **Never run builds** to check if it works without asking
 - **Latest Versions** Always use latest version for dependencies
 - **Never propose to bypass commit hooks**
+- If it is a Cloudflare project, we deploy when pushing, we don't trigger deployments using Wrangler.
 
 ## Tools
 
