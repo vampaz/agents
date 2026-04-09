@@ -52,7 +52,7 @@
 
 ## 1. Think Before Coding
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+**Don't assume. Don't be lazy**
 
 Before implementing:
 
