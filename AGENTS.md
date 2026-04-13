@@ -22,6 +22,7 @@
 - Use `mountWithDeps()` helper for Vue test mounting
 - Always declare functions as functions and not let or const
 - Always use single quotes for strings
+- When writing CSS layouts, always default to fluid responsive layouts. hardcoded dimensions are most of the times forbidden. Only when they make sense should they be used.
 
 ## Projects Rules
 
