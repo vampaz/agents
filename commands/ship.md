@@ -1,17 +1,18 @@
 ---
-name: ship
 description: Stage, commit, safely and push all changes to the current branch
 ---
 
-**Goal:**  
+**Goal:**
 Create a commit message and commit changes **only if safe**.
 
 ### Rules
+
 - **Never modify files during the review. Ever.**
 - **If danger is detected, halt and explain the reason.**
 - **If there are no changes, halt and say so.**
 
 ### What to do
+
 1. Check current git changes.
 2. Evaluate safety.
    - If **danger detected** → **halt and explain why**.
@@ -21,6 +22,7 @@ Create a commit message and commit changes **only if safe**.
 4. Commit and push.
 
 ### Allowed commands
+
 - `git diff`
 - `git status`
 - `git add`
@@ -28,13 +30,15 @@ Create a commit message and commit changes **only if safe**.
 - `git push`
 
 ### Disallowed
+
 - Changing files, except if it is needed for fixing linting issues
 - Asking the user questions
 - Letting git auto-generate the commit message
 
 ### Output requirements
-- On **halt due to danger**:  
+
+- On **halt due to danger**:
   `HALT: <clear reason>`
-- On **halt due to no changes**:  
+- On **halt due to no changes**:
   `HALT: no changes to commit`
 - On success: proceed silently with commit and push.

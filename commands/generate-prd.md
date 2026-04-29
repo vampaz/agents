@@ -1,5 +1,4 @@
 ---
-name: generate-prd
 description: Generates PRDs from e2e specs and codebase
 agent: default
 ---
@@ -11,6 +10,7 @@ Use `$ARGUMENTS` as the authoritative plan file. Follow it step by step. We will
 You are an engineering assistant tasked with generating a Product Requirements Document (PRD) from an existing codebase and E2E tests.
 
 Goals:
+
 - Produce multiple Markdown PRD files suitable for an Astro documentation site.
 - Split by feature into `./prd/docs/<feature>/index.md` and include a top-level `./prd/docs/index.md`.
 - Use Astro front matter in every file.
@@ -20,11 +20,13 @@ Goals:
 - For each requirement, cite evidence with file paths.
 
 Constraints:
+
 - Do not run builds.
 - Do not modify code besides writing the PRD Markdown files.
 - Keep output concise and evidence-based.
 
 Output:
+
 - Create `./prd/docs/index.md` and per-feature `./prd/docs/<feature>/index.md` files.
 - Each feature file must include: overview, users, flows, functional requirements, non-functional requirements, edge cases, analytics/telemetry, permissions/security, integrations, open questions, and traceability.
 - Use flat bullet lists (no nested bullets).
@@ -32,6 +34,7 @@ Output:
 - Add Mermaid diagrams when they materially improve clarity (e.g., key flows, state transitions, or integrations). Keep diagrams minimal and directly tied to evidence.
 
 Process:
+
 - Work section by section according to the plan in `$ARGUMENTS`.
 - After completing each section, update the plan file and mark that section as done with `[x]`.
 
