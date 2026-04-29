@@ -1,20 +1,19 @@
 ---
+name: build-agent
 description: Build an AI agent on Cloudflare using the Agents SDK
-argument-hint: [agent-description]
-allowed-tools: [Read, Glob, Grep, Bash, Write, Edit, WebFetch]
 ---
 
 # Build AI Agent on Cloudflare
 
-This command helps you build AI agents using the Cloudflare Agents SDK with state management, real-time WebSockets, scheduled tasks, and tool integration.
+This skill helps you build AI agents using the Cloudflare Agents SDK with state management, real-time WebSockets, scheduled tasks, and tool integration.
 
 ## Arguments
 
-The user invoked this command with: $ARGUMENTS
+The user invoked this skill with: $ARGUMENTS
 
 ## Instructions
 
-When this command is invoked:
+When this skill is invoked:
 
 1. Read the skill file at `building-ai-agent-on-cloudflare/SKILL.md` for core guidance
 2. Reference `building-ai-agent-on-cloudflare/references/examples.md` for templates

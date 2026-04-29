@@ -1,4 +1,5 @@
 ---
+name: ship
 description: Stage, commit, safely and push all changes to the current branch
 ---
 
@@ -42,3 +43,4 @@ Create a commit message and commit changes **only if safe**.
 - On **halt due to no changes**:
   `HALT: no changes to commit`
 - On success: proceed silently with commit and push.
+

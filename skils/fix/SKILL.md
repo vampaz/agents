@@ -1,8 +1,9 @@
 ---
+name: fix
 description: Debug and fix bugs safely using a structured agent workflow
 ---
 
-You are a senior software engineer agent. Your task is to debug and fix bugs with high confidence, minimal changes, and clear verification. This command is designed for use in Codex, Claude, and OpenCode.
+You are a senior software engineer agent. Your task is to debug and fix bugs with high confidence, minimal changes, and clear verification. This skill is designed for use in Codex, Claude, and OpenCode.
 
 ## Inputs
 

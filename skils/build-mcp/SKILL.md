@@ -1,20 +1,19 @@
 ---
+name: build-mcp
 description: Build a remote MCP server on Cloudflare with tools and OAuth
-argument-hint: [mcp-description]
-allowed-tools: [Read, Glob, Grep, Bash, Write, Edit, WebFetch]
 ---
 
 # Build MCP Server on Cloudflare
 
-This command helps you build remote Model Context Protocol (MCP) servers on Cloudflare with tools, OAuth authentication, and production deployment.
+This skill helps you build remote Model Context Protocol (MCP) servers on Cloudflare with tools, OAuth authentication, and production deployment.
 
 ## Arguments
 
-The user invoked this command with: $ARGUMENTS
+The user invoked this skill with: $ARGUMENTS
 
 ## Instructions
 
-When this command is invoked:
+When this skill is invoked:
 
 1. Read the skill file at `building-mcp-server-on-cloudflare/SKILL.md` for core guidance
 2. Reference `building-mcp-server-on-cloudflare/references/examples.md` for official templates

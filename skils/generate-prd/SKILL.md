@@ -1,6 +1,6 @@
 ---
+name: generate-prd
 description: Generates PRDs from e2e specs and codebase
-agent: default
 ---
 
 Use `$ARGUMENTS` as the authoritative plan file. Follow it step by step. We will execute the plan **section by section**, and after completing a section, you must return to the plan file and mark that section as done using `[x]`.
@@ -39,3 +39,4 @@ Process:
 - After completing each section, update the plan file and mark that section as done with `[x]`.
 
 Begin by scanning routes, views, and E2E tests. Then generate the docs.
+

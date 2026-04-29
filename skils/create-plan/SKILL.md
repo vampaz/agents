@@ -1,6 +1,6 @@
 ---
+name: create-plan
 description: Create a structured, test-driven implementation plan
-agent: explore
 ---
 
 You are a senior software architect. Create a detailed, step-by-step implementation plan based on:
@@ -37,3 +37,4 @@ The plan must use a checklist format for both high-level phases and individual s
     - Test: `[command]`
 - [ ] Phase 2: [Phase Description]
       ...
+

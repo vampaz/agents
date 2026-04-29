@@ -8,15 +8,6 @@ cp AGENTS.md "$HOME/.config/opencode/"
 cp AGENTS.md "$HOME/.claude/CLAUDE.md"
 cp AGENTS.md "$HOME/.pi/agent/AGENTS.md"
 
-# Sync commands
-echo "Syncing commands..."
-
-mkdir -p "$HOME/.codex/prompts/" "$HOME/.config/opencode/commands/" "$HOME/.claude/commands/" "$HOME/.pi/agent/prompts/"
-cp -r commands/* "$HOME/.codex/prompts/"
-cp -r commands/* "$HOME/.config/opencode/commands/"
-cp -r commands/* "$HOME/.claude/commands/"
-cp -r commands/* "$HOME/.pi/agent/prompts/"
-
 echo "Syncing skills..."
 
 SKILLS_DIR=""
@@ -27,7 +18,7 @@ elif [ -d "skils" ]; then
 fi
 
 if [ -n "$SKILLS_DIR" ]; then
-  mkdir -p "$HOME/.codex/skills/" "$HOME/.opencode/skills/" "$HOME/.claude/skills/" "$HOME/.pi/agent/skills/"
+  mkdir -p "$HOME/.codex/skills/" "$HOME/.config/opencode/skills/" "$HOME/.claude/skills/" "$HOME/.pi/agent/skills/"
   cp -r "$SKILLS_DIR"/* "$HOME/.codex/skills/"
   cp -r "$SKILLS_DIR"/* "$HOME/.config/opencode/skills/"
   cp -r "$SKILLS_DIR"/* "$HOME/.claude/skills/"

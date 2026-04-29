@@ -1,12 +1,6 @@
 ---
-description: Stage, commit, safely and push all changes to the current branch
----
-
----
-
-name: 'improve-perf-vue-pspdfkit'
-description: 'Performance review and improvement plan for Vue + PSPDFKit'
-
+name: improve-perf-vue-pspdfkit
+description: Performance review and improvement plan for Vue + PSPDFKit
 ---
 
 # Vue + PSPDFKit Performance Review + Improvement Plan
@@ -249,3 +243,4 @@ Your report must include:
 - 1–3 patches/diffs if safe
 
 End.
+

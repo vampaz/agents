@@ -1,4 +1,5 @@
 ---
+name: learn-branch
 description: Deeply learn and internalize all work done on this branch
 ---
 
@@ -61,3 +62,4 @@ Tone:
 - Thoughtful
 - Engineering-focused
 - UX-focused
+

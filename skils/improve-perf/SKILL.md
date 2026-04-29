@@ -1,4 +1,5 @@
 ---
+name: improve-perf
 description: Performance review and improvement plan for JS/Vue/Astro/Cloudflare Workers
 ---
 
@@ -236,3 +237,4 @@ Your report must include:
 - 1–3 patches/diffs (only if safe)
 
 End.
+
