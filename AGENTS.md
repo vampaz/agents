@@ -34,6 +34,7 @@
 - **Never add timeouts** when running e2e tests, use `page.waitForSelector` instead
 - During development we already have the dev server running. it usually runa at <repo>.<branch>.localhost. Check the vite config for details about the tls config
 - **NPX**: Never use `npx` to run tools that are part of the project's dependencies
+- **NPM dependencies**: We have NCU installed globally, use it
 - **ESM Only**: Never use `require()`. Only ESM imports
 - **Never run builds** to check if it works without asking
 - **Latest Versions** Always use latest version for dependencies
