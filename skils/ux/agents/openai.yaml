@@ -1,0 +1,4 @@
+interface:
+  display_name: "UX"
+  short_description: "Apply Laws of UX to interface work."
+  default_prompt: "Use the UX skill to review this product, flow, or interface and suggest focused improvements grounded in Laws of UX principles."
