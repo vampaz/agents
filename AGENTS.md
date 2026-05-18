@@ -28,27 +28,40 @@
 
 - **Main branch**: `master`
 - **Never run builds** to check functionality
-- Fix **TypeScript errors** only when asked or absolutely necessary
 - Use existing patterns and libraries (check `package.json`)
 - Follow existing component structure and naming
-- **Never add timeouts** when running e2e tests, use `page.waitForSelector` instead
-- During development we already have the dev server running. it usually runa at <repo>.<branch>.localhost. Check the vite config for details about the tls config
+- During development I ususally have the vite dev server running. it usually runs at <repo>.<branch>.localhost. Check the vite config for details about the tls config
 - **NPX**: Never use `npx` to run tools that are part of the project's dependencies
-- **NPM dependencies**: We have NCU installed globally, use it
+- **NPM dependencies**: We have NCU installed globally, use it to update dependencies
 - **ESM Only**: Never use `require()`. Only ESM imports
-- **Never run builds** to check if it works without asking
+- **Never run builds** unless your changes are prone to impact the build
 - **Latest Versions** Always use latest version for dependencies
 - **Never propose to bypass commit hooks**
-- If it is a Cloudflare project, we deploy when pushing, we don't trigger deployments using Wrangler.
+- If it is a Cloudflare project, we deploy after pushing using cloudflare CI, we don't trigger deployments manually using Wrangler.
 
 ## Tools
 
+### Available
+
+- NCU to manage npm dependencies
+- Github CLI to manage git
+- NVM to manage node versions
+- Wrangler for Cloudflare
+
+### npm scripts (common across projects)
+
 - **Build**: `npm run build`
 - **Lint**: `npm run lint`
-- **Test (unit)**: `npm run test` or `npm run test:watch`
+- **Lint fix**: `npm run lint:fix`
+- **Format**: `npm run format`
+- **Format check**: `npm run format:check`
+- **Typecheck**: `npm run typecheck`
+- **Test (unit)**: `npm run test`
 - **Test (single file)**: `npm run test -- path/to/file.spec.ts`
-- **E2E tests**: `cd tests/e2e && npm run test`
-- **Format**: `npm run prettier`
+- **Test watch**: `npm run test:watch`
+- **E2E tests**: `npm run test:e2e`
+
+if running in the Codex app use the in app browser by default when you need to see webapps.
 
 ## Behavioral guidelines
 
@@ -131,11 +144,7 @@ Never forget mark plan phases as done
 - Good ideas matter more than who said them; back up your claims if needed
 - Be open to new tech and wild ideas, but label them as such
 - Skip the formatting and comments unless they don't make sense anymore
-- If you need more space, break up your answer
-- Don't tell me to run the app; I'm already running it
 - Unit tests are next to the file being tested `[fileName].spec.ts`
 - Unit test must be always fully green, failing tests get you fired
-- Never include claude mentions in commit messages
-- Never run builds to check if it works without asking
 - Github CLI is installed and you should use it for common tasks
 - Always use the latest version of the tools and libraries
