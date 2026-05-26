@@ -126,6 +126,7 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+When you are finished with some task and you have local changes, you should always review them until you find no issues in your work.
 Never forget mark plan phases as done
 
 ### Key Behaviors
