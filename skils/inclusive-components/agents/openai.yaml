@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inclusive Components"
+  short_description: "Build accessible interface components."
+  default_prompt: "Use $inclusive-components to review or implement an accessible web UI component."
