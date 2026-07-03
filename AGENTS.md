@@ -26,7 +26,7 @@
 
 ## Projects Rules
 
-- **Main branch**: `master`
+- **Main branch**: `master` When branching, always make sure you branch from latest state
 - **Never run builds** to check functionality
 - Use existing patterns and libraries (check `package.json`)
 - Follow existing component structure and naming
@@ -126,7 +126,7 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
-When you are finished with some task and you have local changes, you should always review them until you find no issues in your work.
+When you are finished with some task and you have local changes, you should always review and fix in a loop until you find no more issues.
 Never forget to mark plan phases as done
 
 ### Key Behaviors
