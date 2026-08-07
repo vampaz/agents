@@ -4,7 +4,6 @@
 - **STRICT: ZERO REVERT POLICY**: Always keep in mind that me or another agent may change files. don't revert other contributorschanges, never., unless asked
 - **TASK COMPLETE**: Never consider a task completed and ready to commit before I confirm it is complete
 - **Immediate start**: Start working on the task immediately after receiving it unless you have questions
-- **Clear language**: Always use ASD-STE100 Simplified Technical English
 
 ## Code Style
 
