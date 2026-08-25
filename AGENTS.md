@@ -1,9 +1,23 @@
 # CRITICAL PROTOCOLS (READ FIRST)
 
-- **STRICT: ZERO GIT WRITE POLICY**: You are strictly forbidden from staging ,committing or pushing changes without direct, explicit user request or permission. When the user does request a commit you generate a concise commit message
+- **STRICT: PROTECTED MASTER POLICY**: Never create a commit on local `master` or push to remote `master` unless the user explicitly instructs you to perform that specific action on `master`. Without that instruction, committing or pushing to `master` is forbidden.
+- **NON-MASTER GIT AUTONOMY**: On every branch other than `master`, you may stage, commit, and push that branch without requesting additional permission after the mandatory completion gate passes. This is permission, not a requirement to create a commit for every task.
+- **VERIFY GIT TARGETS**: Check the current local branch before committing and resolve the destination branch before pushing. Never rely on an assumed branch or upstream.
 - **STRICT: ZERO REVERT POLICY**: Always keep in mind that me or another agent may change files. don't revert other contributorschanges, never., unless asked
-- **TASK COMPLETE**: Never consider a task completed and ready to commit before I confirm it is complete
+- **TASK COMPLETE**: Never consider a task completed or ready to commit before the mandatory completion gate passes
 - **Immediate start**: Start working on the task immediately after receiving it unless you have questions
+
+## Mandatory Completion Gate
+
+For every task that creates or modifies code, tests, configuration, documentation, or another workspace artifact, use the `review-and-fix` skill after implementation and before reporting completion.
+
+Do not report the task as complete until the final revision survives the skill's complete review cycle with no actionable findings and all applicable validation succeeds.
+
+Run this completion gate once when implementation ends. Its successful result remains valid for the reviewed task changes while their content stays unchanged. Staging, committing, or pushing those unchanged changes does not trigger another review. If the content changes after review or no valid prior review is known in the current context, run the gate before completion or shipping.
+
+If the skill is unavailable, perform its equivalent review-and-fix cycle manually and disclose that fallback.
+
+This completion gate authorizes only in-scope local fixes. Git actions follow the protected branch policy above. The gate never authorizes deployment, destructive actions, external reviewers, subagents, or scope expansion.
 
 ## Code Style
 
@@ -56,7 +70,7 @@
 - **Test watch**: `npm run test:watch`
 - **E2E tests**: `npm run test:e2e`
 
-if running in the Codex app use the in app browser by default when you need to see webapps.
+When the current harness provides an integrated browser, use it by default when you need to inspect or test web applications.
 
 ## Behavioral guidelines
 
@@ -121,7 +135,6 @@ For multi-step tasks, state a brief plan:
 ```
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
-When you are finished with some task and you have local changes, you should always review and fix in a loop until you find no more issues.
 Never forget to mark plan phases as done
 
 ### Key Behaviors

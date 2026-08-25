@@ -1,47 +1,39 @@
 ---
 name: ship
-description: Review pending changes, fix issues when safe, then commit and push only if everything looks good.
+description: Reuse a valid completed review or review pending changes when needed, then commit and push only if everything looks good.
 ---
 
 **Goal:**
-Review all pending changes, fix any issues found, then create a commit and push **only if the result is safe and verified**.
+Ensure all pending changes have a current successful `review-and-fix` result, reusing the task's completed review when the content is unchanged. Then create a commit and push **only if the result is safe, verified, and allowed by the repository's protected branch policy**.
 
 ### Rules
 
-- **Review before staging.** Understand every pending change before committing.
-- **Fix only issues directly related to the pending changes.** Do not refactor unrelated code or clean up unrelated files.
+- **Do not duplicate review.** If the exact current task changes already passed the completion review and their content has not changed, reuse that result instead of running the skill again. Staging unchanged content does not invalidate the review.
+- **Review when needed.** Use the `review-and-fix` skill when no valid prior review is known or the content changed after review.
+- **Protect `master`.** Never create a commit on local `master` or push to remote `master` unless the user explicitly instructs that specific action on `master`. Only perform the action or actions explicitly authorized.
+- **Allow non-master autonomy.** On every branch other than `master`, no additional permission is required to stage, commit, or push after review and verification succeed.
 - **Never revert other contributors' changes.** If a change is unclear but not obviously broken, leave it and report the risk.
 - **If danger is detected and cannot be safely fixed, halt and explain the reason.**
 - **If there are no changes, halt and say so.**
-- **Only commit and push after review, fixes, and verification pass.**
+- **Only commit and push when a current successful `review-and-fix` result exists with no actionable findings and successful validation.**
 
 ### What to do
 
-1. Check current git changes.
-2. Review the full diff for:
-   - Bugs, regressions, broken behavior, and obvious logic errors
-   - Missing or stale tests for changed behavior
-   - Type, lint, formatting, or unused import issues caused by the changes
-   - Accidental files, secrets, generated noise, or unrelated edits
-   - Project instruction violations
-3. Evaluate safety.
+1. Check the current branch, intended push target, and git changes.
+2. Evaluate safety.
    - If **no changes** → **halt and state “no changes to commit.”**
+   - If creating the commit on local **`master`** or pushing to remote **`master`** lacks explicit authorization for that specific action → **halt before staging and explain that `master` is protected.**
    - If **unfixable danger detected** → **halt and explain why.**
-4. Fix issues found during review.
-   - Keep fixes minimal and directly tied to the pending changes.
-   - Do not touch unrelated files.
-   - If a fix requires product judgment or broad refactoring, halt instead of guessing.
-5. Verify.
-   - Run the smallest relevant tests or checks for the changed files.
-   - If tests were changed, run those tests.
-   - Do not run builds unless explicitly allowed by project instructions.
-   - If verification fails, fix once if the fix is obvious and scoped. If it still fails, halt and report.
-6. Re-review the final diff.
-   - Confirm there are no unresolved issues, accidental files, or unrelated edits.
-7. Stage all intended changes.
-8. Write a short, clear commit message.
+3. Determine from the current task context whether the exact pending changes already completed the `review-and-fix` cycle successfully.
+   - If they did and their content is unchanged, reuse that result. Do not repeat the review merely because shipping has started.
+   - If they did not, the prior result is unknown, or the content changed afterward, use the `review-and-fix` skill before staging.
+   - If the skill is unavailable when review is needed, perform its equivalent review-and-fix cycle manually and disclose that fallback.
+   - If review reports a blocker, unresolved finding, or failed validation, halt and report the exact reason.
+4. Confirm the intended diff has not changed since the successful final review cycle.
+5. Stage all intended changes.
+6. Write a short, clear commit message.
    - Prefer: `feat`, `fix`, `chore`, `refactor`, `docs`, `test`
-9. Commit and push.
+7. Commit and push.
 
 ### Allowed commands
 
