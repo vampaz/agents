@@ -42,11 +42,12 @@ is_safe_skill_name() {
 
 # Sync AGENTS.md
 echo "Syncing AGENTS.md..."
-mkdir -p "$HOME/.codex/" "$HOME/.config/opencode/" "$HOME/.claude/" "$HOME/.pi/agent/"
+mkdir -p "$HOME/.codex/" "$HOME/.config/opencode/" "$HOME/.claude/" "$HOME/.pi/agent/" "$HOME/.omp/agent/"
 cp AGENTS.md "$HOME/.codex/"
 cp AGENTS.md "$HOME/.config/opencode/"
 cp AGENTS.md "$HOME/.claude/CLAUDE.md"
 cp AGENTS.md "$HOME/.pi/agent/AGENTS.md"
+cp AGENTS.md "$HOME/.omp/agent/AGENTS.md"
 
 echo "Syncing skills..."
 
@@ -58,7 +59,7 @@ elif [ -d "skils" ]; then
 fi
 
 if [ -n "$SKILLS_DIR" ]; then
-  for DEST_DIR in "$HOME/.codex/skills/" "$HOME/.config/opencode/skills/" "$HOME/.claude/skills/" "$HOME/.pi/agent/skills/"; do
+  for DEST_DIR in "$HOME/.codex/skills/" "$HOME/.config/opencode/skills/" "$HOME/.claude/skills/" "$HOME/.pi/agent/skills/" "$HOME/.omp/agent/skills/"; do
     sync_skills "$SKILLS_DIR" "$DEST_DIR"
   done
 else
