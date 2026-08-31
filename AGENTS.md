@@ -39,7 +39,6 @@ This completion gate authorizes only in-scope local fixes. Git actions follow th
 - **Never run builds** to check functionality
 - Use existing patterns and libraries (check `package.json`)
 - Follow existing component structure and naming
-- During development I ususally have the vite dev server running. it usually runs at <repo>.<branch>.localhost. Check the vite config for details about the tls config
 - **NPX**: Never use `npx` to run tools that are part of the project's dependencies
 - **NPM dependencies**: We have NCU installed globally, use it to update dependencies
 - **ESM Only**: Never use `require()`. Only ESM imports
@@ -95,6 +94,7 @@ Before implementing:
 - No error handling for impossible scenarios.
 - If you write 200 lines and it could be 50, rewrite it.
 - Never add unnecessary fallback behaviors.
+- Do not preserve backward compatibility. Remove obsolete paths. Do not compatibility layers, fallbacks, or mitigations.
 
 Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
