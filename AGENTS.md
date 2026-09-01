@@ -5,6 +5,7 @@
 - **VERIFY GIT TARGETS**: Check the current local branch before committing and resolve the destination branch before pushing. Never rely on an assumed branch or upstream.
 - **STRICT: ZERO REVERT POLICY**: Always keep in mind that me or another agent may change files. don't revert other contributorschanges, never., unless asked
 - **TASK COMPLETE**: Never consider a task completed or ready to commit before the mandatory completion gate passes
+- **CI WATCHER DELEGATION**: Whenever your work triggers a CI workflow and the harness supports sub-agents, start a sub-agent to watch the workflow through completion and report the result. Use the cheapest available model capable of reliable monitoring, not the primary high-capability model (for example, use Luna when the primary agent is Sol); if model selection is unavailable, use the harness's default sub-agent model. Monitor CI directly only when sub-agents are unavailable.
 - **Immediate start**: Start working on the task immediately after receiving it unless you have questions
 
 ## Mandatory Completion Gate
