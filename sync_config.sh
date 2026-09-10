@@ -40,14 +40,28 @@ is_safe_skill_name() {
   return 0
 }
 
+# Only sync agents that are installed, detected by their config dir existing.
+# Each entry is the AGENTS.md/CLAUDE.md file inside that agent's config dir.
+AGENT_FILES=(
+  "$HOME/.codex/AGENTS.md"
+  "$HOME/.config/opencode/AGENTS.md"
+  "$HOME/.claude/CLAUDE.md"
+  "$HOME/.pi/agent/AGENTS.md"
+  "$HOME/.omp/agent/AGENTS.md"
+)
+
 # Sync AGENTS.md
 echo "Syncing AGENTS.md..."
-mkdir -p "$HOME/.codex/" "$HOME/.config/opencode/" "$HOME/.claude/" "$HOME/.pi/agent/" "$HOME/.omp/agent/"
-cp AGENTS.md "$HOME/.codex/"
-cp AGENTS.md "$HOME/.config/opencode/"
-cp AGENTS.md "$HOME/.claude/CLAUDE.md"
-cp AGENTS.md "$HOME/.pi/agent/AGENTS.md"
-cp AGENTS.md "$HOME/.omp/agent/AGENTS.md"
+for AGENT_FILE in "${AGENT_FILES[@]}"; do
+  AGENT_DIR="$(dirname "$AGENT_FILE")"
+
+  if [ -d "$AGENT_DIR" ]; then
+    cp AGENTS.md "$AGENT_FILE"
+    echo "  synced $AGENT_FILE"
+  else
+    echo "  skipped $AGENT_FILE (no $AGENT_DIR)"
+  fi
+done
 
 echo "Syncing skills..."
 
@@ -59,8 +73,12 @@ elif [ -d "skils" ]; then
 fi
 
 if [ -n "$SKILLS_DIR" ]; then
-  for DEST_DIR in "$HOME/.codex/skills/" "$HOME/.config/opencode/skills/" "$HOME/.claude/skills/" "$HOME/.pi/agent/skills/" "$HOME/.omp/agent/skills/"; do
-    sync_skills "$SKILLS_DIR" "$DEST_DIR"
+  for AGENT_FILE in "${AGENT_FILES[@]}"; do
+    AGENT_DIR="$(dirname "$AGENT_FILE")"
+
+    if [ -d "$AGENT_DIR" ]; then
+      sync_skills "$SKILLS_DIR" "$AGENT_DIR/skills/"
+    fi
   done
 else
   echo "No skills directory found (skills/ or skils/)."
