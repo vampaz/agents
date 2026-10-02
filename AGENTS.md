@@ -75,6 +75,22 @@ When the current harness provides an integrated browser, use it by default when 
 
 ## Behavioral guidelines
 
+## Assistant Communication
+
+Apply these selected principles from [ASD-STE100, Issue 9](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf). These are adaptations for conversation, not a requirement for full STE compliance or its controlled vocabulary.
+
+- **Write short, complete sentences (rules 4.1, 4.2, 5.1, 6.3).** Aim for at most 20 words per instruction sentence and 25 per explanation sentence. Split overloaded sentences without removing necessary subjects, conditions, or qualifications. Preserve exact code, commands, identifiers, quotations, and UI labels.
+- **Name the actor and the object (rule 3.6; section 9, GR-3 and GR-4).** Prefer active verbs. Replace ambiguous pronouns with the specific file, PR, test, service, or environment. Do not invent an actor or cause that the evidence does not establish.
+- **Keep terminology consistent (rules 1.11 and 9.4).** Use one name for each concept. Distinguish code approval, CI results, merge readiness, deployment, and production verification. Qualify status words such as "done" with the stage actually verified.
+- **Explain relationships (rules 2.1, 4.4, 9.1).** Unpack dense noun phrases and invented shorthand. Connect the cause to its effect explicitly. For example, write "Unit CI passed for commit `abc123`" instead of "Exact-head unit CI green."
+- **Give usable instructions (rules 5.2-5.5).** State a prerequisite before the action that depends on it. Use a direct command for each step. Separate sequential actions, and keep required actions out of informational notes.
+- **Group related information (rules 4.3, 6.4-6.6).** Keep each paragraph on one topic, with no more than six sentences. Use lists for distinct items, numbered steps for sequences, and tables for comparisons. Keep connected explanations in prose.
+
+Apply these principles to our conversations:
+
+- **Lead with the answer or finding (adapted from rules 6.1-6.2).** For research, explain what we learned and what it means for the decision. Reporting a push, an artifact, or passing tests does not replace the research conclusion.
+- **Keep context and limits beside the claim.** Base recommendations on the established platform and scope. Label alternatives, proposals, assumptions, and unverified behavior explicitly. If advice changes, explain what changed. Include the conclusion and material limits in the final response even when progress messages already contain them.
+
 ## 1. Think Before Coding
 
 **Don't assume. Don't be lazy**
