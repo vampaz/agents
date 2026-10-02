@@ -50,13 +50,13 @@ AGENT_FILES=(
   "$HOME/.omp/agent/AGENTS.md"
 )
 
-# Sync AGENTS.md
-echo "Syncing AGENTS.md..."
+# Sync global AGENTS.md
+echo "Syncing global AGENTS.md..."
 for AGENT_FILE in "${AGENT_FILES[@]}"; do
   AGENT_DIR="$(dirname "$AGENT_FILE")"
 
   if [ -d "$AGENT_DIR" ]; then
-    cp AGENTS.md "$AGENT_FILE"
+    cp global/AGENTS.md "$AGENT_FILE"
     echo "  synced $AGENT_FILE"
   else
     echo "  skipped $AGENT_FILE (no $AGENT_DIR)"
