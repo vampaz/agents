@@ -56,6 +56,10 @@ This completion gate authorizes only in-scope local fixes. Git actions follow th
 - NCU to manage npm dependencies
 - Github CLI to manage git
 - NVM to manage node versions
+- Cloudflare CLI (`cf`) is installed globally. Prefer it for Cloudflare tasks unless the project has a Wrangler configuration file.
+  Start with `cf cli search '<task description>'` to find commands by intent. Quote the whole description as one argument.
+  Inspect the selected command with `cf <command> --help`; use `cf schema <command>` for generated API request details.
+  Preview API changes with `--dry-run`. See the [Cloudflare CLI agent guide](https://developers.cloudflare.com/cf/agents/).
 - Wrangler for Cloudflare
 
 ### npm scripts (common across projects)
