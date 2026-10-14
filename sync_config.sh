@@ -38,14 +38,14 @@ sync_skill_scripts() {
         continue
       fi
 
-      if ! find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path "*/scripts/$SCRIPT_NAME" -type f | grep -q .; then
+      if ! find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path '*/scripts/*' -type f ! -name '.*' -perm -u+x -name "$SCRIPT_NAME" | grep -q .; then
         rm -f -- "$DEST_DIR/$SCRIPT_NAME"
       fi
     done < "$MANIFEST_FILE"
   fi
 
-  find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path '*/scripts/*' -type f -exec install -m 0755 {} "$DEST_DIR/" \;
-  find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path '*/scripts/*' -type f -exec basename {} \; | sort -u > "$MANIFEST_FILE"
+  find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path '*/scripts/*' -type f ! -name '.*' -perm -u+x -exec install -m 0755 {} "$DEST_DIR/" \;
+  find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path '*/scripts/*' -type f ! -name '.*' -perm -u+x -exec basename {} \; | sort -u > "$MANIFEST_FILE"
 }
 
 is_safe_skill_name() {

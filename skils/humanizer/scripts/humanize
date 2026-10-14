@@ -75,12 +75,18 @@ function parseArgs(args) {
       if (!nextArg) {
         throw new Error('Missing file path after --file');
       }
+      if (filePath !== null) {
+        throw new Error('Multiple --file options are not supported');
+      }
       filePath = nextArg;
       index += 1;
       continue;
     }
 
     if (arg.startsWith('--file=')) {
+      if (filePath !== null) {
+        throw new Error('Multiple --file options are not supported');
+      }
       filePath = arg.slice('--file='.length);
       if (!filePath) {
         throw new Error('Missing file path after --file=');
@@ -107,6 +113,10 @@ function parseArgs(args) {
 }
 
 function readInputDraft(options) {
+  if (options.filePath === '-') {
+    return fs.readFileSync(0, 'utf8');
+  }
+
   if (options.filePath) {
     return fs.readFileSync(options.filePath, 'utf8');
   }
@@ -173,6 +183,9 @@ async function ensureModelLoaded() {
     process.stderr.write('Starting LM Studio server...\n');
     await execFileAsync(lmsBin, ['server', 'start']);
     status = await fetchModelState();
+    if (!status.serverReachable) {
+      throw new Error(`LM Studio server is not reachable at ${BASE_URL}`);
+    }
   }
 
   if (status.loaded) {
@@ -180,15 +193,24 @@ async function ensureModelLoaded() {
   }
 
   process.stderr.write(`Loading ${MODEL_ID} in LM Studio...\n`);
-  await execFileAsync(lmsBin, [
-    'load',
-    MODEL_ID,
-    '--context-length',
-    MODEL_CONTEXT_LENGTH,
-    '--ttl',
-    String(MODEL_TTL_SECONDS),
-    '--yes',
-  ]);
+  try {
+    await execFileAsync(lmsBin, [
+      'load',
+      MODEL_ID,
+      '--identifier',
+      MODEL_ID,
+      '--context-length',
+      MODEL_CONTEXT_LENGTH,
+      '--ttl',
+      String(MODEL_TTL_SECONDS),
+      '--yes',
+    ]);
+  } catch (error) {
+    const refreshed = await fetchModelState();
+    if (!refreshed.loaded) {
+      throw error;
+    }
+  }
 }
 
 async function rewriteDraft(draft) {
@@ -212,7 +234,14 @@ async function rewriteDraft(draft) {
   }
 
   const payload = await response.json();
-  const rewritten = payload?.choices?.[0]?.text;
+  const choice = payload?.choices?.[0];
+  if (choice?.finish_reason === 'length') {
+    throw new Error(
+      'Completion truncated at context length limit; split the input into smaller sections',
+    );
+  }
+
+  const rewritten = choice?.text;
   if (typeof rewritten !== 'string' || !rewritten.trim()) {
     throw new Error('LM Studio returned an empty completion');
   }

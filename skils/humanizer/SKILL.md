@@ -12,7 +12,7 @@ Use the local `humanize` CLI script to rewrite AI-sounding prose into natural, h
 The `humanize` command (installed in `~/.local/bin/humanize` and bundled at `scripts/humanize` inside this skill directory) automatically:
 
 1. Checks whether the LM Studio server (`http://127.0.0.1:1234`) is running and starts it with `lms server start` if needed.
-2. Checks whether `humanizer-12b-optiq` is loaded and loads it with `lms load humanizer-12b-optiq --context-length 8192 --ttl 900 --yes` if missing.
+2. Checks whether `humanizer-12b-optiq` is loaded and loads it with `lms load humanizer-12b-optiq --identifier humanizer-12b-optiq --context-length 8192 --ttl 900 --yes` if missing.
 3. Formats the legacy completion prompt (`instr + "\n\n" + draft + "\n\n### Rewritten:\n\n"`) with `stop: ["### Rewritten"]` and calls `POST http://127.0.0.1:1234/v1/completions` (never `/v1/chat/completions`).
 4. Prints only the rewritten text to `stdout` (progress logs go to `stderr`).
 
