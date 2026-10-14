@@ -24,6 +24,30 @@ sync_skills() {
   find "$SOURCE_DIR" -mindepth 1 -maxdepth 1 -exec basename {} \; | sort > "$MANIFEST_FILE"
 }
 
+sync_skill_scripts() {
+  local SOURCE_DIR="$1"
+  local DEST_DIR="$2"
+  local MANIFEST_FILE="$DEST_DIR/.sync_config_scripts_manifest"
+
+  mkdir -p "$DEST_DIR"
+
+  if [ -f "$MANIFEST_FILE" ]; then
+    while IFS= read -r SCRIPT_NAME; do
+      if ! is_safe_skill_name "$SCRIPT_NAME"; then
+        echo "Skipping unsafe script manifest entry: $SCRIPT_NAME"
+        continue
+      fi
+
+      if ! find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path "*/scripts/$SCRIPT_NAME" -type f | grep -q .; then
+        rm -f -- "$DEST_DIR/$SCRIPT_NAME"
+      fi
+    done < "$MANIFEST_FILE"
+  fi
+
+  find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path '*/scripts/*' -type f -exec install -m 0755 {} "$DEST_DIR/" \;
+  find "$SOURCE_DIR" -mindepth 3 -maxdepth 3 -path '*/scripts/*' -type f -exec basename {} \; | sort -u > "$MANIFEST_FILE"
+}
+
 is_safe_skill_name() {
   local SKILL_NAME="$1"
 
@@ -80,6 +104,9 @@ if [ -n "$SKILLS_DIR" ]; then
       sync_skills "$SKILLS_DIR" "$AGENT_DIR/skills/"
     fi
   done
+
+  echo "Syncing skill scripts to $HOME/.local/bin..."
+  sync_skill_scripts "$SKILLS_DIR" "$HOME/.local/bin"
 else
   echo "No skills directory found (skills/ or skils/)."
 fi
