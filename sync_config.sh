@@ -72,6 +72,7 @@ AGENT_FILES=(
   "$HOME/.claude/CLAUDE.md"
   "$HOME/.pi/agent/AGENTS.md"
   "$HOME/.omp/agent/AGENTS.md"
+  "$HOME/.dsh/AGENTS.md"
 )
 
 # Sync global AGENTS.md
