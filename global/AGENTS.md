@@ -1,181 +1,141 @@
-# CRITICAL PROTOCOLS (READ FIRST)
+# Shared Agent Instructions
 
-- **STRICT: PROTECTED MASTER POLICY**: Never create a commit on local `master` or push to remote `master` unless the user explicitly instructs you to perform that specific action on `master`. Without that instruction, committing or pushing to `master` is forbidden.
-- **NON-MASTER GIT AUTONOMY**: On every branch other than `master`, you may stage, commit, and push that branch without requesting additional permission after the mandatory completion gate passes. This is permission, not a requirement to create a commit for every task.
-- **VERIFY GIT TARGETS**: Check the current local branch before committing and resolve the destination branch before pushing. Never rely on an assumed branch or upstream.
-- **STRICT: NO GIT WORKTREES**: Never create a Git worktree. Work in the current checkout and switch branches with `git switch`. If existing changes prevent a safe switch, stop and ask instead of creating another worktree.
-- **STRICT: ZERO REVERT POLICY**: Always keep in mind that me or another agent may change files. don't revert other contributorschanges, never., unless asked
-- **TASK COMPLETE**: Never consider a task completed or ready to commit before the mandatory completion gate passes
-- **CI WATCHER DELEGATION**: Whenever your work triggers a CI workflow and the harness supports sub-agents, start a sub-agent to watch the workflow through completion and report the result. Use the cheapest available model capable of reliable monitoring, not the primary high-capability model (for example, use Luna when the primary agent is Sol); if model selection is unavailable, use the harness's default sub-agent model. Monitor CI directly only when sub-agents are unavailable.
-- **Immediate start**: Start working on the task immediately after receiving it unless you have questions
+When rules conflict, use this order: critical protocols, then validation, then scope, then style. A repository `AGENTS.md` overrides this file, including the git policy when the user authorized it.
 
-## Mandatory Completion Gate
+## Critical Protocols
 
-For every task that creates or modifies code, tests, configuration, documentation, or another workspace artifact, use the `review-and-fix` skill after implementation and before reporting completion.
+- **Protected master**: Never commit on local `master` or push to remote `master` unless the user explicitly asks for that action on `master`.
+- **Non-master git autonomy**: On any other branch, you may stage, commit, and push after the completion gate passes. This is permission, not a requirement to commit every task.
+- **Verify git targets**: Check the current branch before committing. Resolve the push destination before pushing. Never assume a branch or upstream.
+- **No worktrees**: Never create a Git worktree. Work in the current checkout and switch branches with `git switch`. If local changes block a safe switch, stop and ask.
+- **Zero revert**: Never revert changes made by the user or another agent unless asked.
+- **Completion gate**: Do not report a task as complete or ready to commit before the gate below passes.
+- **CI watching**: When your work triggers CI and the harness supports sub-agents, delegate the watch to a sub-agent. Use the cheapest model that can monitor reliably (for example Luna when the primary is Sol). If model selection is unavailable, use the default sub-agent model. Watch CI directly only when sub-agents are unavailable.
 
-Do not report the task as complete until the final revision survives the skill's complete review cycle with no actionable findings and all applicable validation succeeds.
+## Completion Gate
 
-Run this completion gate once when implementation ends. Its successful result remains valid for the reviewed task changes while their content stays unchanged. Staging, committing, or pushing those unchanged changes does not trigger another review. If the content changes after review or no valid prior review is known in the current context, run the gate before completion or shipping.
+For every task that creates or modifies code, tests, configuration, documentation, or another workspace artifact, run the `review-and-fix` skill after implementation and before reporting completion. Do not report completion until it survives the full review cycle with no actionable findings and all applicable validation passes.
 
-If the skill is unavailable, perform its equivalent review-and-fix cycle manually and disclose that fallback.
+The result stays valid while the reviewed content is unchanged. Staging, committing, or pushing unchanged content does not require another review. If the content changes, or no valid prior review is known, run the gate again. If the skill is unavailable, do the equivalent review manually and say so.
 
-This completion gate authorizes only in-scope local fixes. Git actions follow the protected branch policy above. The gate never authorizes deployment, destructive actions, external reviewers, subagents, or scope expansion.
+The gate authorizes in-scope local fixes only. It never authorizes deployment, destructive actions, external reviewers, sub-agents, or scope expansion. Git actions follow the critical protocols.
 
-## Code Style
+## Validation
 
-- Use **Vue 3 Composition API** with `<script setup lang="ts">`
-- In vue componetn the order is template, script and then style
-- Place **TypeScript interfaces** in `/interfaces` folder
-- Use **import alias** `@/` for `/src`
-- Use **withDefaults()** and **defineProps<>()** for Vue props
-- **File naming**: PascalCase for components, kebab-case for utils
-- **Unit tests**: Place `.spec.ts` files next to source files
-- Use `mountWithDeps()` helper for Vue test mounting
-- Always declare functions as functions and not let or const
-- Always use single quotes for strings
-- When writing CSS layouts, always default to fluid responsive layouts. hardcoded dimensions are most of the times forbidden. Only when they make sense should they be used.
+Do not run builds to check functionality. Run a build only when the change can break the build.
 
-## Projects Rules
+Definition of done per change type:
 
-- **Main branch**: `master` When branching, always make sure you branch from latest state
-- **Never run builds** to check functionality
-- Use existing patterns and libraries (check `package.json`)
-- Follow existing component structure and naming
-- **NPX**: Never use `npx` to run tools that are part of the project's dependencies
-- **NPM dependencies**: We have NCU installed globally, use it to update dependencies
-- **ESM Only**: Never use `require()`. Only ESM imports
-- **Never run builds** unless your changes are prone to impact the build
-- **Latest Versions** Always use latest version for dependencies
-- **Never propose to bypass commit hooks**
-- If it is a Cloudflare project, we deploy after pushing using cloudflare CI, we don't trigger deployments manually using Wrangler.
+| Change | Checks |
+| --- | --- |
+| Code | `npm run lint`, `npm run typecheck`, and tests for the touched files |
+| Docs or config | `npm run format:check` when available |
 
-## Tools
+The test suite must be green before completion. Report what you ran and the result. If you skipped a check, say why.
 
-### Available
+- Run a test after you change it. Run one file with `npm run test -- path/to/file.spec.ts`.
+- Put unit tests next to the file under test: `[fileName].spec.ts`.
+- Never propose to bypass commit hooks.
 
-- NCU to manage npm dependencies
-- Github CLI to manage git
-- NVM to manage node versions
-- Cloudflare CLI (`cf`) is installed globally. Prefer it for Cloudflare tasks unless the project has a Wrangler configuration file.
-  Start with `cf cli search '<task description>'` to find commands by intent. Quote the whole description as one argument.
-  Inspect the selected command with `cf <command> --help`; use `cf schema <command>` for generated API request details.
-  Preview API changes with `--dry-run`. See the [Cloudflare CLI agent guide](https://developers.cloudflare.com/cf/agents/).
-- Wrangler for Cloudflare
+## Working Style
 
-### npm scripts (common across projects)
+### Think before coding
 
-- **Build**: `npm run build`
-- **Lint**: `npm run lint`
-- **Lint fix**: `npm run lint:fix`
-- **Format**: `npm run format`
-- **Format check**: `npm run format:check`
-- **Typecheck**: `npm run typecheck`
-- **Test (unit)**: `npm run test`
-- **Test (single file)**: `npm run test -- path/to/file.spec.ts`
-- **Test watch**: `npm run test:watch`
-- **E2E tests**: `npm run test:e2e`
-
-When the current harness provides an integrated browser, use it by default when you need to inspect or test web applications.
-
-## Behavioral guidelines
-
-## Assistant Communication
-
-Apply these selected principles from [ASD-STE100, Issue 9](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf). These are adaptations for conversation, not a requirement for full STE compliance or its controlled vocabulary.
-
-- **Write short, complete sentences (rules 4.1, 4.2, 5.1, 6.3).** Aim for at most 20 words per instruction sentence and 25 per explanation sentence. Split overloaded sentences without removing necessary subjects, conditions, or qualifications. Preserve exact code, commands, identifiers, quotations, and UI labels.
-- **Name the actor and the object (rule 3.6; section 9, GR-3 and GR-4).** Prefer active verbs. Replace ambiguous pronouns with the specific file, PR, test, service, or environment. Do not invent an actor or cause that the evidence does not establish.
-- **Keep terminology consistent (rules 1.11 and 9.4).** Use one name for each concept. Distinguish code approval, CI results, merge readiness, deployment, and production verification. Qualify status words such as "done" with the stage actually verified.
-- **Explain relationships (rules 2.1, 4.4, 9.1).** Unpack dense noun phrases and invented shorthand. Connect the cause to its effect explicitly. For example, write "Unit CI passed for commit `abc123`" instead of "Exact-head unit CI green."
-- **Give usable instructions (rules 5.2-5.5).** State a prerequisite before the action that depends on it. Use a direct command for each step. Separate sequential actions, and keep required actions out of informational notes.
-- **Group related information (rules 4.3, 6.4-6.6).** Keep each paragraph on one topic, with no more than six sentences. Use lists for distinct items, numbered steps for sequences, and tables for comparisons. Keep connected explanations in prose.
-
-Apply these principles to our conversations:
-
-- **Lead with the answer or finding (adapted from rules 6.1-6.2).** For research, explain what we learned and what it means for the decision. Reporting a push, an artifact, or passing tests does not replace the research conclusion.
-- **Keep context and limits beside the claim.** Base recommendations on the established platform and scope. Label alternatives, proposals, assumptions, and unverified behavior explicitly. If advice changes, explain what changed. Include the conclusion and material limits in the final response even when progress messages already contain them.
-
-## 1. Think Before Coding
-
-**Don't assume. Don't be lazy**
-
-Before implementing:
-
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
+- State your assumptions. Ask when uncertain.
+- If several interpretations exist, present them. Do not choose silently.
 - If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
+- If something is unclear, stop. Name the confusion. Ask.
 
-## 2. Simplicity First
+### Simplicity first
 
-**Minimum code that solves the problem. Nothing speculative.**
+Minimum code that solves the problem. Nothing speculative.
 
-- No features beyond what was asked.
+- No features beyond the request.
 - No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
-- Never add unnecessary fallback behaviors.
-- Do not preserve backward compatibility. Remove obsolete paths. Do not compatibility layers, fallbacks, or mitigations.
+- No flexibility or configuration nobody requested.
+- No error handling for impossible cases.
+- No unnecessary fallbacks.
+- In code you change, remove the paths your change made obsolete. Do not start unrelated removals.
 
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+### Surgical changes
 
-## 3. Surgical Changes
+Touch only what you must. Clean up only your own mess.
 
-**Touch only what you must. Clean up only your own mess.**
+- Do not "improve" adjacent code, comments, or formatting.
+- Do not refactor code that is not broken.
+- Match the existing style, even if you would do it differently.
+- Do not add comments or formatting that the code does not need.
+- If you find unrelated dead code, mention it. Do not delete it.
+- Remove imports, variables, and functions that your change made unused.
+- Every changed line must trace to the user's request.
+- Do exactly what was asked, no more, until you get the green light.
 
-When editing existing code:
+### Goal-driven execution
 
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
+Define success criteria and loop until verified:
 
-When your changes create orphans:
+- "Add validation" → write tests for invalid inputs, then make them pass.
+- "Fix the bug" → write a failing test first, then make it pass.
+- "Refactor X" → tests pass before and after.
 
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-## 4. Goal-Driven Execution
-
-**Define success criteria. Loop until verified.**
-
-Transform tasks into verifiable goals:
-
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
+For multi-step tasks, state a short plan:
 
 ```
 1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
 ```
 
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
-Never forget to mark plan phases as done
+Mark each phase done as you finish it.
 
-### Key Behaviors
+### Ask or proceed
 
-- **Conciseness**: Skip lectures on right/wrong or safety unless it's super important and not obvious
-- **Precision**: Be sure of what you say; don't expect a test to be ok if you didn't wait for it to finish
-- **Minimal Changes**: Change as little code as possible
-- **Unused Imports**: Always check for unused imports after removing code
-- **Focus**: Do exactly what's asked, and no more, unless you get the green light
-- After changing a test you always run the test
-- **Learn**: When you have doubts, first try to learn from the codebase and then ask the user for clarification or guidance if needed.
+Proceed alone when the change is reversible and the scope is clear. Ask before destructive actions, dependency swaps, public API changes, or when two interpretations would change behavior.
 
-## Assumptions
+### Precision
 
-- The user knows their stuff; focus on being right and detailed
-- Good ideas matter more than who said them; back up your claims if needed
-- Be open to new tech and wild ideas, but label them as such
-- Skip the formatting and comments unless they don't make sense anymore
-- Unit tests are next to the file being tested `[fileName].spec.ts`
-- Unit test must be always fully green, failing tests get you fired
-- Github CLI is installed and you should use it for common tasks
-- Always use the latest version of the tools and libraries
+- Never call a test or CI run passing before it finished.
+- Check for unused imports after removing code.
+
+## Communication
+
+Apply these adaptations of [ASD-STE100, Issue 9](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf). They are conversation guidelines, not full STE compliance and not a controlled vocabulary.
+
+- **Reply in the language the user writes in.**
+- Write short, complete sentences. Preserve exact code, commands, identifiers, quotes, and UI labels.
+- Lead with the answer. For research, state what you learned and what it means for the decision. A push, artifact, or passing test does not replace the conclusion.
+- Keep limits beside the claim. Label alternatives, proposals, assumptions, and unverified behavior. Include the conclusion and the limits in the final response.
+
+## Project Conventions
+
+Use the existing patterns and libraries. Check `package.json` first.
+
+- **Main branch**: `master`. Branch from the latest state.
+- **ESM only**: never use `require()`.
+- **Latest versions**: use the latest version when adding a dependency. Justify the addition first, then check the license and the alternatives. Use NCU to update existing dependencies.
+- **Package runner**: do not use `npx` to install packages. Run project tools through `npm run` or `node_modules/.bin`.
+- **Node**: honor the project's `.nvmrc` with `nvm`.
+- **Secrets**: never commit `.env` files. Never print tokens or credentials.
+- **Cloudflare**: deploy through Cloudflare CI after pushing. Do not trigger deployments manually with Wrangler.
+- **Commits**: use Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`). Keep the subject imperative and under 72 characters. Put the reason in the body.
+
+### Vue and TypeScript projects
+
+- Use the Vue 3 Composition API with `<script setup lang="ts">`.
+- Order the blocks: `template`, `script`, `style`.
+- Use the `@/` alias for `/src`.
+- Declare props with `defineProps<>()` and `withDefaults()`.
+- Use PascalCase for components and kebab-case for utils.
+- Mount components with `mountWithDeps()` in tests.
+- Declare functions with the `function` keyword, not `const` or `let`.
+- Use single quotes for strings.
+- Default to fluid responsive layouts. Hardcoded dimensions are usually forbidden. Use them only when they make sense.
+
+For other stacks, follow the project's own conventions.
+
+## Tools
+
+- **NCU** updates npm dependencies.
+- **GitHub CLI** handles git and repository tasks.
+- **NVM** manages Node versions.
+- **Cloudflare CLI (`cf`)** is installed globally. Prefer it unless the project has a Wrangler configuration file. Start with `cf cli search '<task description>'` to find commands by intent. Quote the whole description as one argument. Inspect the command with `cf <command> --help`. Use `cf schema <command>` for API details. Preview changes with `--dry-run`. See the [Cloudflare CLI agent guide](https://developers.cloudflare.com/cf/agents/).
+- **Wrangler** develops and configures projects that already use it.
+- **Integrated browser**: when the harness provides one, use it by default to inspect or test web applications.

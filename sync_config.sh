@@ -191,14 +191,9 @@ done
 
 echo "Syncing skills..."
 
-SKILLS_DIR=""
-if [ -d "$BASE_DIR/skills" ]; then
-  SKILLS_DIR="$BASE_DIR/skills"
-elif [ -d "$BASE_DIR/skils" ]; then
-  SKILLS_DIR="$BASE_DIR/skils"
-fi
+SKILLS_DIR="$BASE_DIR/skills"
 
-if [ -n "$SKILLS_DIR" ]; then
+if [ -d "$SKILLS_DIR" ]; then
   for AGENT_FILE in "${AGENT_FILES[@]}"; do
     AGENT_DIR="$(dirname "$AGENT_FILE")"
 
@@ -210,7 +205,7 @@ if [ -n "$SKILLS_DIR" ]; then
   echo "Syncing skill scripts to $HOME/.local/bin..."
   sync_skill_scripts "$SKILLS_DIR" "$HOME/.local/bin"
 else
-  echo "No skills directory found (skills/ or skils/)."
+  echo "No skills directory found at $SKILLS_DIR."
 fi
 
 echo "Syncing agents..."

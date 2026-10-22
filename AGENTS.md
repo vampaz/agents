@@ -20,10 +20,17 @@ This repository is the single source of truth for the shared agent configuration
 | Folder | Contents | Destination |
 | --- | --- | --- |
 | `global/AGENTS.md` | Shared instructions | The `AGENTS.md` or `CLAUDE.md` file of every installed agent |
-| `skils/` | Skills | The `skills/` folder of every installed agent |
+| `skills/` | Skills | The `skills/` folder of every installed agent |
 | `agents/` | Subagent definitions | The `agents/` folder of OpenCode and Claude Code |
+| `scripts/` | Helpers used by `sync_config.sh` | Not synced |
 
 Never edit the copies inside the agent configuration folders. Edit the source here and run `sync_config.sh`.
+
+After editing a shared file, verify the sync:
+
+1. Run `bash -n sync_config.sh` when the script changed.
+2. Run `./sync_config.sh`.
+3. Compare one destination, for example `diff global/AGENTS.md ~/.config/opencode/AGENTS.md`.
 
 ## Subagent Definitions
 
