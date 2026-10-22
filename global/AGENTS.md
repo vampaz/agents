@@ -62,11 +62,6 @@ This completion gate authorizes only in-scope local fixes. Git actions follow th
   Preview API changes with `--dry-run`. See the [Cloudflare CLI agent guide](https://developers.cloudflare.com/cf/agents/).
 - Wrangler for Cloudflare
 
-### Humanizer model (LM Studio)
-
-- Use the `humanizer` skill or the `humanize` CLI (`~/.local/bin/humanize`) to rewrite AI-sounding text with `humanizer-12b-optiq` in LM Studio.
-- Pass draft text via stdin (`humanize <<'EOF' ... EOF`) or `--file <path>`, and always show the user the BEFORE and AFTER text.
-
 ### npm scripts (common across projects)
 
 - **Build**: `npm run build`
