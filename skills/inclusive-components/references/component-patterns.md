@@ -158,14 +158,14 @@ Use tables only for data that has meaningful row and column relationships.
 
 ## Modal Dialogs
 
-Use dialogs for critical, blocking questions or short tasks.
+Use modal dialogs for blocking decisions or short tasks.
 
-- Avoid dialogs for routine information. If content is rich, multi-step, or non-urgent, use a page or screen instead.
-- Avoid non-modal dialogs; they are often confusing because they appear important without actually blocking the page.
+- Avoid interrupting users with a modal for routine information. Prefer a page for rich or multi-step tasks.
+- Use a non-modal dialog for a parallel task, such as a find panel or inspector, when the page must remain interactive. Give it a visible close control. See [modern-web-ui.md](modern-web-ui.md) for native overlay choices.
 - Prefer native dialog behavior when available and appropriate.
 - A custom modal must handle initial focus, focus trapping, Escape, close controls, background inertness, scroll behavior, and return focus.
 - Keep dialog copy brief and action choices clear.
-- Ask questions in dialogs; do not use them merely to state something that already happened.
+- Use inline status for routine updates about something that already happened.
 - Test with keyboard only: open, read title/content, choose action, close, and return to the original task.
 
 ## Cards

@@ -1,24 +1,19 @@
 ---
 name: web-perf
-description: Analyzes web performance using Chrome DevTools MCP. Measures Core Web Vitals (FCP, LCP, TBT, CLS, Speed Index), identifies render-blocking resources, network dependency chains, layout shifts, caching issues, and accessibility gaps. Use when asked to audit, profile, debug, or optimize page load performance, Lighthouse scores, or site speed.
+description: Audit and improve web performance, using Chrome DevTools MCP for live measurements. Covers Core Web Vitals (LCP, INP, CLS), loading diagnostics, rendering, long tasks, caching, and accessibility gaps. Use when asked to audit, profile, debug, or optimize page loading, interaction responsiveness, Lighthouse scores, or site speed.
 ---
 
 # Web Performance Audit
 
 Audit web page performance using Chrome DevTools MCP tools. This skill focuses on Core Web Vitals, network optimization, and high-level accessibility gaps.
 
-## FIRST: Verify MCP Tools Available
+For implementation guidance adapted from Google's Modern Web Guidance, read [references/modern-web-performance.md](references/modern-web-performance.md) when fixing image loading, long tasks, poor INP, or expensive off-screen rendering. These local references also support code review without a running browser.
 
-**Run this before starting.** Try calling `navigate_page` or `performance_start_trace`. If unavailable, STOP—the chrome-devtools MCP server isn't configured.
+## Live Measurement Tools
 
-Ask the user to add this to their MCP config:
+For a live audit, discover the available Chrome DevTools MCP tools before following the measurement workflow below. Use the actual tool schemas; names and arguments can vary by harness.
 
-```json
-"chrome-devtools": {
-  "type": "local",
-  "command": ["npx", "-y", "chrome-devtools-mcp@latest"]
-}
-```
+If browser measurement tools are unavailable, continue with source analysis when code is available and mark runtime metrics as unmeasured. If neither a browser nor source is available, report the missing evidence. Installing tools or changing harness configuration is a separate task.
 
 ## Key Guidelines
 
@@ -27,7 +22,7 @@ Ask the user to add this to their MCP config:
 - **Quantify impact**: Use estimated savings from insights. Don't prioritize changes with 0ms impact.
 - **Skip non-issues**: If render-blocking resources have 0ms estimated impact, note but don't recommend action.
 - **Be specific**: Say "compress hero.png (450KB) to WebP" not "optimize images".
-- **Prioritize ruthlessly**: A site with 200ms LCP and 0 CLS is already excellent—say so.
+- **Assess each metric**: Good loading and layout stability do not establish good responsiveness. Measure interactions before assessing INP.
 
 ## Quick Reference
 
@@ -60,7 +55,7 @@ Audit Progress:
    navigate_page(url: "<target-url>")
    ```
 
-2. Start a performance trace with reload to capture cold-load metrics:
+2. Start a performance trace with reload to capture page-load metrics. Record cache state, device, and throttling; a reload alone does not establish a cold cache:
    ```
    performance_start_trace(autoStop: true, reload: true)
    ```
@@ -74,6 +69,8 @@ Audit Progress:
 ### Phase 2: Core Web Vitals Analysis
 
 Use `performance_analyze_insight` to extract key metrics.
+
+Core Web Vitals are LCP, INP, and CLS. FCP, TBT, Speed Index, and TTFB are supporting diagnostics. A page-load trace alone does not measure representative INP: record the affected interactions and separate input delay, event processing, and presentation delay using the local performance reference. Label lab measurements separately from field data; field assessment uses the 75th percentile, segmented by mobile and desktop. See [Web Vitals](https://web.dev/articles/vitals).
 
 **Note:** Insight names may vary across Chrome DevTools versions. If an insight name doesn't work, check the `insightSetId` from the trace response to discover available insights.
 
@@ -95,10 +92,10 @@ performance_analyze_insight(insightSetId: "<id-from-trace>", insightName: "LCPBr
 **Key thresholds (good/needs-improvement/poor):**
 - TTFB: < 800ms / < 1.8s / > 1.8s
 - FCP: < 1.8s / < 3s / > 3s
-- LCP: < 2.5s / < 4s / > 4s
-- INP: < 200ms / < 500ms / > 500ms
+- LCP: ≤ 2.5s / > 2.5s and ≤ 4s / > 4s
+- INP: ≤ 200ms / > 200ms and ≤ 500ms / > 500ms
 - TBT: < 200ms / < 600ms / > 600ms
-- CLS: < 0.1 / < 0.25 / > 0.25
+- CLS: ≤ 0.1 / > 0.1 and ≤ 0.25 / > 0.25
 - Speed Index: < 3.4s / < 5.8s / > 5.8s
 
 ### Phase 3: Network Analysis
@@ -112,7 +109,7 @@ list_network_requests(resourceTypes: ["Script", "Stylesheet", "Document", "Font"
 
 1. **Render-blocking resources**: JS/CSS in `<head>` without `async`/`defer`/`media` attributes
 2. **Network chains**: Resources discovered late because they depend on other resources loading first (e.g., CSS imports, JS-loaded fonts)
-3. **Missing preloads**: Critical resources (fonts, hero images, key scripts) not preloaded
+3. **Late critical resources**: Confirm discovery delays in the waterfall before adding preloads for fonts, hero images, or key scripts; preloading everything creates competition.
 4. **Caching issues**: Missing or weak `Cache-Control`, `ETag`, or `Last-Modified` headers
 5. **Large payloads**: Uncompressed or oversized JS/CSS bundles
 6. **Unused preconnects**: If flagged, verify by checking if ANY requests went to that origin. If zero requests, it's definitively unused—recommend removal. If requests exist but loaded late, the preconnect may still be valuable.

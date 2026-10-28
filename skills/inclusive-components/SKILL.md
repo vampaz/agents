@@ -15,6 +15,8 @@ The PDF-derived implementation recipes are in `references/component-recipes.md`.
 
 The layout-specific guidance is in `references/html-css-layout.md`. Load it when the task involves page layout, component layout, responsive behavior, Flexbox, Grid, container queries, sizing, spacing, overflow, source order, or CSS layout debugging.
 
+The guidance adapted from Google's Modern Web Guidance is in [references/modern-web-ui.md](references/modern-web-ui.md). Load it when choosing native overlays, adding form validation or automatic sizing, handling Enter submission, animating intrinsic sizes, or checking browser support and progressive enhancement.
+
 ## Workflow
 
 1. Identify the component's user task, whether it changes state, and whether it creates, removes, reveals, or interrupts content.

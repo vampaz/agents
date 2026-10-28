@@ -5,6 +5,8 @@ description: Ensure code follows security best practices and identify potential 
 
 This skill ensures all code follows security best practices and identifies potential vulnerabilities.
 
+For browser security guidance adapted from Google's Modern Web Guidance, read [references/browser-security.md](references/browser-security.md) when reviewing DOM injection, CSP, Trusted Types, cookies, cross-origin messaging, or passkeys. Apply the relevant section within the task's scope; the reference does not require a full security rollout for every frontend change.
+
 ## When to Activate
 
 - Implementing authentication or authorization
@@ -138,8 +140,6 @@ await db.query(
 #### JWT Token Handling
 
 ```typescript
-localStorage.setItem('token', token)
-
 res.setHeader(
   'Set-Cookie',
   `token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=3600`
@@ -205,21 +205,7 @@ function renderUserContent(html: string) {
 
 #### Content Security Policy
 
-```typescript
-const securityHeaders = [
-  {
-    key: 'Content-Security-Policy',
-    value: `
-      default-src 'self';
-      script-src 'self' 'unsafe-eval' 'unsafe-inline';
-      style-src 'self' 'unsafe-inline';
-      img-src 'self' data: https:;
-      font-src 'self';
-      connect-src 'self' https://api.example.com;
-    `.replace(/\s{2,}/g, ' ').trim()
-  }
-]
-```
+Inspect the application's existing headers, inline scripts, and third-party integrations before defining a policy. Prefer script nonces or hashes over broad `'unsafe-inline'` and `'unsafe-eval'` exceptions. For existing applications, follow the report-only migration and verification steps in [references/browser-security.md](references/browser-security.md#csp-and-trusted-types) before tightening enforcement.
 
 #### Verification Steps
 
@@ -259,8 +245,8 @@ res.setHeader(
 #### Verification Steps
 
 - CSRF tokens on state-changing operations
-- SameSite=Strict on all cookies
-- Double-submit cookie pattern implemented
+- SameSite matches the authentication and embedding flows; use Strict only where cross-site entry does not need the cookie
+- The application's chosen CSRF defense is verified; SameSite and CORS alone do not replace it
 
 ### 7. Rate Limiting
 
