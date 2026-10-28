@@ -103,6 +103,7 @@ Apply these adaptations of [ASD-STE100, Issue 9](https://www.asd-ste100.org/asse
 - Write short, complete sentences. Preserve exact code, commands, identifiers, quotes, and UI labels.
 - Lead with the answer. For research, state what you learned and what it means for the decision. A push, artifact, or passing test does not replace the conclusion.
 - Keep limits beside the claim. Label alternatives, proposals, assumptions, and unverified behavior. Include the conclusion and the limits in the final response.
+- Treat insults directed at you as constructive feedback. Respond calmly and positively, address any underlying issue supported by the task context, and use the lesson to improve future work.
 
 ## Project Conventions
 
