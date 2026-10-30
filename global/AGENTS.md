@@ -12,7 +12,7 @@ Skills supplement these instructions. Their checklists do not waive required UI 
 - **No worktrees**: Never create a Git worktree. Work in the current checkout and switch branches with `git switch`. If local changes block a safe switch, stop and ask.
 - **Zero revert**: Never revert changes made by the user or another agent unless asked.
 - **Completion gate**: Do not report a task as complete or ready to commit before the gate below passes.
-- **CI watching**: When your work triggers CI and the harness supports sub-agents, delegate the watch to a sub-agent. Use the cheapest model that can monitor reliably (for example Luna when the primary is Sol). If model selection is unavailable, use the default sub-agent model. Watch CI directly only when sub-agents are unavailable.
+- **CI watching**: When your work triggers CI and the harness supports sub-agents, delegate the watch to a sub-agent. Use the cheapest model that can monitor reliably (for example Luna when the primary is Sol). If model selection is unavailable, use the default sub-agent model. Watch CI directly only when sub-agents are unavailable. Keep watcher messages internal; follow [CI and test reporting](#ci-and-test-reporting).
 
 ## Completion Gate
 
@@ -119,6 +119,15 @@ Apply these adaptations of [ASD-STE100, Issue 9](https://www.asd-ste100.org/asse
 - For research, state what you learned and what it means for the decision. A push, artifact, or passing test does not replace the conclusion.
 - Keep limits beside the claim. Label alternatives, proposals, assumptions, and unverified behavior. Include the conclusion and the limits in the final response.
 - Treat insults directed at you as constructive feedback. Respond calmly and positively, address any underlying issue supported by the task context, and use the lesson to improve future work.
+
+### CI and test reporting
+
+- Monitor CI and long-running tests silently unless the user explicitly requests progress messages. Asking to monitor or wait is not such a request.
+- Do not announce queued or running jobs, shard results, coverage merging, report generation, retries, or "still waiting" updates.
+- Do not fill a general progress-update cadence with CI or test status. If waiting is the only remaining work, stay silent.
+- Keep updates from monitoring sub-agents internal. Report one concise, combined final outcome when the requested monitoring is finished; include the CI link when available.
+- During monitoring, interrupt only for a concrete blocker that needs the user's action or a material code finding or fix. Repair already-authorized failures without asking again.
+- If the user asks for status, answer that question briefly. It does not authorize continuing progress updates.
 
 ## Project Conventions
 
