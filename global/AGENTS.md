@@ -29,6 +29,7 @@ Definition of done per change type:
 | Change | Checks |
 | --- | --- |
 | Code | `npm run lint`, `npm run typecheck`, and tests for the touched files |
+| Web UI | Code checks above, plus rendered UI and interaction checks below |
 | Docs or config | `npm run format:check` when available |
 
 The test suite must be green before completion. Report what you ran and the result. If you skipped a check, say why.
@@ -36,6 +37,15 @@ The test suite must be green before completion. Report what you ran and the resu
 - Run a test after you change it. Run one file with `npm run test -- path/to/file.spec.ts`.
 - Put unit tests next to the file under test: `[fileName].spec.ts`.
 - Never propose to bypass commit hooks.
+
+### Web UI
+
+- Most of our product work is web UI. When a task changes user-visible web behavior or asks for UI review, include both code and rendered UI review unless the user explicitly limits the scope.
+- Keep requested UI checks in the plan and any handoff or context summary until verified or reported blocked. Passing tests does not remove them.
+- Open the affected pages in the running application for the revision under review. Use the integrated browser when available. Inspect screenshots or the browser's visual output and exercise the changed flow. Source code, DOM snapshots, and passing tests alone do not verify appearance or usability.
+- Check desktop and narrow/mobile widths relevant to the task. Inspect affected layout, text, overflow, scrolling, controls, focus and keyboard use, and applicable loading, empty, error, and success states. Keep checks proportional to the change.
+- Report the pages, viewports, and states checked, the observed result, and any gaps. Link screenshots when useful.
+- If browser access or a runnable app is unavailable, finish independent checks and report the specific blocker and remaining UI review. Do not claim the UI passed or the task is complete.
 
 ## Working Style
 
@@ -100,8 +110,11 @@ Proceed alone when the change is reversible and the scope is clear. Ask before d
 Apply these adaptations of [ASD-STE100, Issue 9](https://www.asd-ste100.org/assets/files/ASD-STE100_ISSUE9.pdf). They are conversation guidelines, not full STE compliance and not a controlled vocabulary.
 
 - **Reply in the language the user writes in.**
+- Default to a few short bullets for progress updates and final answers. Use the shortest response that preserves the important explanation. Expand when the user asks or accuracy requires it.
+- Put the outcome or blocker first and explain why it matters. Put any required user action next, then supporting evidence. Omit secondary details that do not change the decision.
+- For completed work, state what changed, what was verified, and what remains unresolved. Make clear whether the user needs to do anything. Avoid chronological narration, repeated conclusions, and long prose.
 - Write short, complete sentences. Preserve exact code, commands, identifiers, quotes, and UI labels.
-- Lead with the answer. For research, state what you learned and what it means for the decision. A push, artifact, or passing test does not replace the conclusion.
+- For research, state what you learned and what it means for the decision. A push, artifact, or passing test does not replace the conclusion.
 - Keep limits beside the claim. Label alternatives, proposals, assumptions, and unverified behavior. Include the conclusion and the limits in the final response.
 - Treat insults directed at you as constructive feedback. Respond calmly and positively, address any underlying issue supported by the task context, and use the lesson to improve future work.
 

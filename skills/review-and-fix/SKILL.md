@@ -1,6 +1,6 @@
 ---
 name: review-and-fix
-description: Review and repair artifacts changed by the current implementation task until the final revision passes three distinct review passes with no actionable findings. Use after workspace-changing tasks and before reporting completion. Do not use as permission to commit, push, deploy, or modify unrelated work.
+description: Review and repair artifacts changed by the current implementation task until the final revision passes three distinct review passes with no actionable findings. Include rendered UI and interaction checks for web UI changes. Use after workspace-changing tasks and before reporting completion. Do not use as permission to commit, push, deploy, or modify unrelated work.
 ---
 
 # Review and Fix
@@ -31,7 +31,7 @@ Do not manufacture findings, pursue subjective style preferences, or repair unre
 
 ### Pass 1: Scope and Diff Integrity
 
-Review the complete task diff.
+Review the complete task diff and recover the user's requested checks from the task context. Keep explicit UI-review requests in the acceptance criteria.
 
 Check requirements coverage, accidental files, unrelated edits, generated noise, secrets, unused code, unnecessary abstractions, instruction violations, and interference with other contributors' work.
 
@@ -43,11 +43,20 @@ Reread the changed implementation, tests, call sites, and affected flows.
 
 Check assumptions, edge cases, failure paths, async behavior, stale state, concurrency, types, compatibility, accessibility, security, performance, and whether tests actually prove the requested behavior.
 
+For web UI, also trace the changed user flow and its expected visible states.
+
 ### Pass 3: Evidence and Runtime Behavior
 
 Run the relevant targeted and broader validation required by the changed surface and project instructions. Wait for every command to finish.
 
-For user-visible work, inspect the real rendered application and relevant states in the browser. Reinspect the final diff after formatting, tests, and generated-file changes.
+For web UI changes or an explicit UI-review request, apply the shared `AGENTS.md` UI checks unless the user explicitly limits the scope:
+
+- Open the affected pages for the revision under review in a browser. Visually inspect screenshots or rendered output and exercise the affected interactions. Code, DOM snapshots, and automated tests alone are insufficient.
+- Check relevant desktop and narrow/mobile widths, affected layout and scrolling, keyboard/focus behavior, and applicable loading, empty, error, and success states.
+- Record the URL, viewports, states/actions checked, observed result, and remaining gaps. Capture screenshots when useful to substantiate findings.
+- If browser or app access is blocked, complete independent validation and report the blocker. The completion gate remains incomplete until the required UI review is performed.
+
+Reinspect the final diff after formatting, tests, and generated-file changes.
 
 ## Fix and Restart
 
@@ -63,12 +72,11 @@ The final revision must complete Passes 1, 2, and 3 consecutively without action
 
 ## Final Result
 
-Report:
+Report in a few short bullets, ordered by importance:
 
-- whether the final review cycle produced no findings;
-- findings discovered and fixed;
-- validation commands and completed results;
-- runtime or visual checks performed; and
-- unresolved blockers, unverified behavior, and residual risks.
+- whether the final review cycle passed, with any blocker or required user action first;
+- material findings fixed;
+- validation commands and completed results, including rendered UI evidence when applicable; and
+- remaining unverified behavior or risks.
 
-Never claim success for a command that did not finish successfully.
+Omit empty categories and routine process narration. Never claim success for a command that did not finish successfully.
