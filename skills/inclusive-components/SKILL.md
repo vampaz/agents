@@ -26,7 +26,7 @@ The guidance adapted from Google's Modern Web Guidance is in [references/modern-
 5. Design keyboard and focus behavior explicitly: entry point, tab order, arrow-key behavior where expected, escape behavior, initial focus, and return focus.
 6. Communicate changes without stealing context. Use visible text first, live regions only when users need unsolicited status, and focus movement only when the task truly moves.
 7. For implementation, apply the relevant recipe from `references/component-recipes.md`.
-8. Check the component against `references/component-patterns.md` and the layout against `references/html-css-layout.md`, then verify with the closest available evidence: unit tests, accessibility tests, browser interaction, screenshots, or manual keyboard testing.
+8. Check the component against `references/component-patterns.md` and the layout against `references/html-css-layout.md`. For implemented web UI, inspect the rendered component and exercise its interactions and keyboard behavior under the shared UI validation rules. Automated tests supplement browser checks; report missing browser checks as incomplete.
 
 ## Design Rules
 

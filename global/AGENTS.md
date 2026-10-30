@@ -2,6 +2,8 @@
 
 When rules conflict, use this order: critical protocols, then validation, then scope, then style. A repository `AGENTS.md` overrides this file, including the git policy when the user authorized it.
 
+Skills supplement these instructions. Their checklists do not waive required UI validation or the completion gate. Their output templates do not override the concise communication defaults unless the user requests a different format. Requested documents can contain the necessary detail; keep the chat handoff short.
+
 ## Critical Protocols
 
 - **Protected master**: Never commit on local `master` or push to remote `master` unless the user explicitly asks for that action on `master`.

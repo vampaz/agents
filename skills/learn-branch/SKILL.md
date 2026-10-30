@@ -18,7 +18,7 @@ Steps to perform:
 4. Analyze the **full diff between this branch and the base branch**.
 5. Cross-reference commits with code changes to understand _why_ changes were made, not just _what_ changed.
 
-Your analysis must include:
+Your investigation must cover these topics; report only what matters for understanding or continuing the work:
 
 - The original problem(s) or motivation this branch appears to address
 - The architectural or design decisions made
@@ -35,7 +35,7 @@ Constraints:
 - Do not modify the repository.
 - Do not ask the user questions.
 - Do not merely restate git output.
-- Prefer reasoning, inference, and explanation over listing.
+- Explain important consequences in concise bullets. Keep the full investigation internal.
 - Assume the reader is technical but unfamiliar with this branch.
 
 Execution guidance:
@@ -50,10 +50,9 @@ Execution guidance:
 
 Final output requirements:
 
-- A **medium form explanation** 1 minute reading written in natural language
-- Clear sectioning (e.g. Motivation, What Changed, How It Works, Risks, Next Steps)
-- Sufficient detail that you could confidently continue development on this branch
-- Treat this as a knowledge transfer document, not a summary
+- Start with the branch's purpose, current state, and any blocker or required action.
+- Use short bullets for changed behavior, key decisions, verification, and remaining work. Expand only when requested or needed to avoid losing a consequential detail.
+- For UI work, distinguish behavior inferred from code from observed browser evidence. Carry pending UI-review requests into the handoff.
 
 Tone:
 

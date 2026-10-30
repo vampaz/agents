@@ -18,7 +18,8 @@ The detailed Laws of UX reference is in `references/laws-of-ux.md`. Load it when
 3. Map the experience moments that create effort: first use, navigation, choices, input, waiting, errors, completion, and return visits.
 4. Apply the smallest relevant set of laws from `references/laws-of-ux.md`.
 5. Recommend or implement changes that make the desired path easier without hiding necessary complexity.
-6. Validate with the closest available evidence: tests, screenshots, interaction checks, analytics context, user research, or explicit assumptions.
+6. For implemented web UI, inspect the running interface and exercise the affected interactions under the shared UI validation rules. Tests, analytics, user research, and assumptions supplement browser checks; report missing browser checks as incomplete.
+7. For concept work without an implemented interface, label recommendations as proposals and state what still needs validation.
 
 ## Review Checklist
 
@@ -32,11 +33,6 @@ The detailed Laws of UX reference is in `references/laws-of-ux.md`. Load it when
 
 ## Output Guidance
 
-When reviewing UX, lead with the highest-impact issues first. For each issue, state:
-
-- The user risk or friction.
-- The relevant UX principle.
-- The smallest concrete change.
-- How to verify the improvement.
+When reviewing UX, lead with the highest-impact issues. Use one short bullet per issue: user impact, smallest concrete fix, and how to verify it. Name the UX principle only when it helps explain the decision.
 
 When implementing UI, keep edits scoped and align with the existing design system. Prefer familiar controls, visible labels where ambiguity is likely, responsive layouts, and accessible interaction states.

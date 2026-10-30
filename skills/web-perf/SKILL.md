@@ -15,6 +15,8 @@ For a live audit, discover the available Chrome DevTools MCP tools before follow
 
 If browser measurement tools are unavailable, continue with source analysis when code is available and mark runtime metrics as unmeasured. If neither a browser nor source is available, report the missing evidence. Installing tools or changing harness configuration is a separate task.
 
+For UI changes or requested UI review, missing browser checks also leave UI validation incomplete under the shared instructions.
+
 ## Key Guidelines
 
 - **Be assertive**: Verify claims by checking network requests, DOM, or codebase—then state findings definitively.
@@ -126,6 +128,8 @@ Take an accessibility tree snapshot:
 take_snapshot(verbose: true)
 ```
 
+Verify contrast and visible focus in the rendered page, and exercise keyboard navigation to check for focus traps. An accessibility tree snapshot alone does not establish these results.
+
 **Flag high-level gaps:**
 - Missing or duplicate ARIA IDs
 - Elements with poor contrast ratios (check against WCAG AA: 4.5:1 for normal text, 3:1 for large text)
@@ -182,9 +186,6 @@ Also check `package.json` for framework dependencies and build scripts.
 
 ## Output Format
 
-Present findings as:
+Lead with the conclusion and any required user action. Use short bullets for prioritized issues, each with its impact, evidence, and smallest fix. Include a compact metrics table when useful; label estimates and unmeasured metrics.
 
-1. **Core Web Vitals Summary** - Table with metric, value, and rating (good/needs-improvement/poor)
-2. **Top Issues** - Prioritized list of problems with estimated impact (high/medium/low)
-3. **Recommendations** - Specific, actionable fixes with code snippets or config changes
-4. **Codebase Findings** - Framework/bundler detected, optimization opportunities (omit if no codebase access)
+Do not repeat findings in separate recommendation and codebase sections. Include code snippets only when needed to make a fix clear, and state any unverified UI behavior.
