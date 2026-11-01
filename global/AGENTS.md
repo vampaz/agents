@@ -164,3 +164,50 @@ For other stacks, follow the project's own conventions.
 - **Cloudflare CLI (`cf`)** is installed globally. Prefer it unless the project has a Wrangler configuration file. Start with `cf cli search '<task description>'` to find commands by intent. Quote the whole description as one argument. Inspect the command with `cf <command> --help`. Use `cf schema <command>` for API details. Preview changes with `--dry-run`. See the [Cloudflare CLI agent guide](https://developers.cloudflare.com/cf/agents/).
 - **Wrangler** develops and configures projects that already use it.
 - **Integrated browser**: when the harness provides one, use it by default to inspect or test web applications.
+
+## Reminders
+
+When the user asks to be reminded of something later, schedule a one-off macOS notification. Do not use Linear (disabled in this workspace) or AppleScript against Reminders (blocked by the macOS automation prompt).
+
+1. Write `~/Library/LaunchAgents/com.eventbot.<slug>.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key><string>com.eventbot.<slug></string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/sh</string>
+    <string>-c</string>
+    <string>/usr/bin/osascript -e 'display notification "<text>" with title "<title>"' &gt;/dev/null 2&gt;&amp;1; /bin/rm -f "$HOME/Library/LaunchAgents/com.eventbot.<slug>.plist"</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Month</key><integer>11</integer>
+    <key>Day</key><integer>2</integer>
+    <key>Hour</key><integer>9</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+  <key>RunAtLoad</key><false/>
+</dict>
+</plist>
+```
+
+2. Validate, load, and confirm:
+
+```sh
+plutil -lint ~/Library/LaunchAgents/com.eventbot.<slug>.plist
+launchctl bootstrap gui/$(id -u) "$HOME/Library/LaunchAgents/com.eventbot.<slug>.plist"
+launchctl print gui/$(id -u)/com.eventbot.<slug>
+```
+
+Rules:
+
+- Set `StartCalendarInterval` with `Month`/`Day`/`Hour`/`Minute`. Omit `Year`; keep `RunAtLoad` false.
+- Keep the notification text short: what to do, where (branch/commit/URL), when.
+- The job deletes its own plist after firing, so it is one-shot.
+- For a recurring reminder, omit the self-delete and tell the user how to remove the job.
+- If the Mac sleeps through the time, launchd fires the job on wake.
+- If a calendar or task connector is connected and the user asks for that channel, use it instead.
