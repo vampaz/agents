@@ -10,3 +10,5 @@ This repository is the single source of truth for the shared agent configuration
 | `scripts/` | Helpers used by `sync_config.sh` |
 
 Run `./sync_config.sh` to copy the shared files into the configuration folder of every installed agent. The script syncs the instructions and the skills to every agent, and the subagent definitions to OpenCode and Claude Code.
+
+Google Chrome's [WebMCP skill](skills/build-webmcp-tools/SKILL.md) is included with its reference guides and evaluation fixtures. See its [upstream record](skills/build-webmcp-tools/UPSTREAM.md) for the source revision, license, and update instructions.
