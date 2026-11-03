@@ -98,6 +98,14 @@ For multi-step tasks, state a short plan:
 
 Mark each phase done as you finish it.
 
+### State Management
+
+- **Explicit state machines only**: For any flow, component, or process with multiple states or non-linear transitions, use an explicit finite state machine (states + transitions). Do not infer state from combinations of booleans, flags, or unrelated derived values.
+- **No flag soup**: Replace patterns like `isLoading && !isError && hasData` used to guess the mode with a named state. If you cannot name the current mode in one word, model it explicitly.
+- **Single source of truth**: State lives in one machine/context. Side effects belong to transitions/actions, not scattered `if` checks.
+- **Unrepresentable invalid states**: Prefer types/schemas that make impossible states unrepresentable. Reject or guard invalid transitions explicitly.
+- **Ask before ad-hoc state**: If a simpler explicit machine is not obvious, state the states/transitions and ask before introducing ad-hoc branching.
+
 ### Ask or proceed
 
 Proceed alone when the change is reversible and the scope is clear. Ask before destructive actions, dependency swaps, public API changes, or when two interpretations would change behavior.
