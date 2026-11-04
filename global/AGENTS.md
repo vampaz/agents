@@ -4,12 +4,14 @@ When rules conflict, use this order: critical protocols, then validation, then s
 
 Skills supplement these instructions. Their checklists do not waive required UI validation or the completion gate. Their output templates do not override the concise communication defaults unless the user requests a different format. Requested documents can contain the necessary detail; keep the chat handoff short.
 
+Shared instructions, skills, and subagent definitions are maintained in `/Users/carlosrodrigues/agents`. Edit their source files there and synchronize with that repository's `sync_config.sh`. Never edit synchronized copies inside individual agents' configuration directories. If the source is unavailable or unclear, ask before changing a copy.
+
 ## Critical Protocols
 
 - **Protected master**: Never commit on local `master` or push to remote `master` unless the user explicitly asks for that action on `master`.
 - **Non-master git autonomy**: On any other branch, you may stage, commit, and push after the completion gate passes. This is permission, not a requirement to commit every task.
 - **Verify git targets**: Check the current branch before committing. Resolve the push destination before pushing. Never assume a branch or upstream.
-- **No worktrees**: Never create a Git worktree. Work in the current checkout and switch branches with `git switch`. If local changes block a safe switch, stop and ask.
+- **Worktrees**: Use Git worktrees instead of separate clones for concurrent tasks. Reuse a suitable existing task worktree before creating another, and preserve the repository's established layout and setup helpers. Run commands with the selected worktree's explicit absolute working directory. If an agent cannot attach an existing worktree in its UI, continue using that path; do not recreate or relocate it just for attachment.
 - **Zero revert**: Never revert changes made by the user or another agent unless asked.
 - **Completion gate**: Do not report a task as complete or ready to commit before the gate below passes.
 - **CI watching**: When your work triggers CI and the harness supports sub-agents, delegate the watch to a sub-agent. Use the cheapest model that can monitor reliably (for example Luna when the primary is Sol). If model selection is unavailable, use the default sub-agent model. Watch CI directly only when sub-agents are unavailable. Keep watcher messages internal; follow [CI and test reporting](#ci-and-test-reporting).
