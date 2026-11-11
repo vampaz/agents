@@ -148,6 +148,7 @@ Use the existing patterns and libraries. Check `package.json` first.
 - **ESM only**: never use `require()`.
 - **Latest versions**: use the latest version when adding a dependency. Justify the addition first, then check the license and the alternatives. Use NCU to update existing dependencies.
 - **Package runner**: do not use `npx` to install packages. Run project tools through `npm run` or `node_modules/.bin`.
+- **Modern Web Guidance**: the `modern-web-guidance` skill runs its CLI with `npx -y modern-web-guidance@latest` or `pnpx modern-web-guidance@latest`. This is the documented exception: it is an ephemeral, upstream-managed tool, not a project dependency.
 - **Node**: honor the project's `.nvmrc` with `nvm`.
 - **Secrets**: never commit `.env` files. Never print tokens or credentials.
 - **Cloudflare**: deploy through Cloudflare CI after pushing. Do not trigger deployments manually with Wrangler.

@@ -7,7 +7,7 @@ description: Audit and improve web performance, using Chrome DevTools MCP for li
 
 Audit web page performance using Chrome DevTools MCP tools. This skill focuses on Core Web Vitals, network optimization, and high-level accessibility gaps.
 
-For implementation guidance adapted from Google's Modern Web Guidance, read [references/modern-web-performance.md](references/modern-web-performance.md) when fixing image loading, long tasks, poor INP, or expensive off-screen rendering. These local references also support code review without a running browser.
+For implementation guidance, use the `modern-web-guidance` skill to retrieve the relevant performance guide before changing code. It covers image loading, long tasks, INP, and expensive off-screen rendering, including fallbacks.
 
 ## Live Measurement Tools
 
@@ -72,7 +72,7 @@ Audit Progress:
 
 Use `performance_analyze_insight` to extract key metrics.
 
-Core Web Vitals are LCP, INP, and CLS. FCP, TBT, Speed Index, and TTFB are supporting diagnostics. A page-load trace alone does not measure representative INP: record the affected interactions and separate input delay, event processing, and presentation delay using the local performance reference. Label lab measurements separately from field data; field assessment uses the 75th percentile, segmented by mobile and desktop. See [Web Vitals](https://web.dev/articles/vitals).
+Core Web Vitals are LCP, INP, and CLS. FCP, TBT, Speed Index, and TTFB are supporting diagnostics. A page-load trace alone does not measure representative INP: record the affected interactions and separate input delay, event processing, and presentation delay using the `modern-web-guidance` skill. Label lab measurements separately from field data; field assessment uses the 75th percentile, segmented by mobile and desktop. See [Web Vitals](https://web.dev/articles/vitals).
 
 **Note:** Insight names may vary across Chrome DevTools versions. If an insight name doesn't work, check the `insightSetId` from the trace response to discover available insights.
 

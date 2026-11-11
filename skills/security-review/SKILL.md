@@ -5,7 +5,7 @@ description: Ensure code follows security best practices and identify potential 
 
 This skill ensures all code follows security best practices and identifies potential vulnerabilities.
 
-For browser security guidance adapted from Google's Modern Web Guidance, read [references/browser-security.md](references/browser-security.md) when reviewing DOM injection, CSP, Trusted Types, cookies, cross-origin messaging, or passkeys. Apply the relevant section within the task's scope; the reference does not require a full security rollout for every frontend change.
+For browser security guidance, use the `modern-web-guidance` skill to retrieve the relevant security guide when reviewing DOM injection, CSP, Trusted Types, cookies, cross-origin messaging, or passkeys.
 
 ## When to Activate
 
@@ -205,7 +205,7 @@ function renderUserContent(html: string) {
 
 #### Content Security Policy
 
-Inspect the application's existing headers, inline scripts, and third-party integrations before defining a policy. Prefer script nonces or hashes over broad `'unsafe-inline'` and `'unsafe-eval'` exceptions. For existing applications, follow the report-only migration and verification steps in [references/browser-security.md](references/browser-security.md#csp-and-trusted-types) before tightening enforcement.
+Inspect the application's existing headers, inline scripts, and third-party integrations before defining a policy. Prefer script nonces or hashes over broad `'unsafe-inline'` and `'unsafe-eval'` exceptions. For existing applications, retrieve the `security` and `trusted-types` guides with the `modern-web-guidance` skill before tightening enforcement.
 
 #### Verification Steps
 
