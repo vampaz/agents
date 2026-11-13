@@ -16,7 +16,7 @@ Shared instructions, skills, and subagent definitions are maintained in `/Users/
 - **Zero revert**: Never revert changes made by the user or another agent unless asked.
 - **Completion gate**: Do not report a task as complete or ready to commit before the gate below passes.
 - **Resource cleanup**: Complete [task resource cleanup](#task-resource-cleanup) before reporting any task finished. Cleanup is part of the task and does not need another user reminder or confirmation.
-- **CI watching**: When your work triggers CI and the harness supports sub-agents, delegate the watch to a sub-agent. Use the cheapest model that can monitor reliably (for example Luna when the primary is Sol). If model selection is unavailable, use the default sub-agent model. Watch CI directly only when sub-agents are unavailable. Keep watcher messages internal; follow [CI and test reporting](#ci-and-test-reporting).
+- **CI watching**: When your work triggers CI and the harness supports sub-agents, delegate the watch to a sub-agent. Pick the cheapest model that can monitor reliably from the harness's own model list; never pass a model name from memory. If the harness cannot select a model, use its default sub-agent model. Watch CI directly only when sub-agents are unavailable. Keep watcher messages internal; follow [CI and test reporting](#ci-and-test-reporting).
 
 ## Completion Gate
 
