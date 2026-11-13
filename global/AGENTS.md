@@ -15,6 +15,7 @@ Shared instructions, skills, and subagent definitions are maintained in `/Users/
 - **Worktrees**: Use Git worktrees instead of separate clones for concurrent tasks. Reuse a suitable existing task worktree before creating another, and preserve the repository's established layout and setup helpers. Run commands with the selected worktree's explicit absolute working directory. If an agent cannot attach an existing worktree in its UI, continue using that path; do not recreate or relocate it just for attachment.
 - **Zero revert**: Never revert changes made by the user or another agent unless asked.
 - **Completion gate**: Do not report a task as complete or ready to commit before the gate below passes.
+- **Resource cleanup**: Complete [task resource cleanup](#task-resource-cleanup) before reporting any task finished. Cleanup is part of the task and does not need another user reminder or confirmation.
 - **CI watching**: When your work triggers CI and the harness supports sub-agents, delegate the watch to a sub-agent. Use the cheapest model that can monitor reliably (for example Luna when the primary is Sol). If model selection is unavailable, use the default sub-agent model. Watch CI directly only when sub-agents are unavailable. Keep watcher messages internal; follow [CI and test reporting](#ci-and-test-reporting).
 
 ## Completion Gate
@@ -24,6 +25,16 @@ For every task that creates or modifies code, tests, configuration, documentatio
 The result stays valid while the reviewed content is unchanged. Staging, committing, or pushing unchanged content does not require another review. If the content changes, or no valid prior review is known, run the gate again. If the skill is unavailable, do the equivalent review manually and say so.
 
 The gate authorizes in-scope local fixes only. It never authorizes deployment, destructive actions, external reviewers, sub-agents, or scope expansion. Git actions follow the critical protocols.
+
+## Task Resource Cleanup
+
+- Track resources from the moment you create them: server process handles/PIDs and working directories, browser sessions and tab IDs, and worktree paths with their branches and PRs. Carry this inventory through handoffs so ownership and cleanup are not lost.
+- Stop every server, watcher, and background process you started when its task is finished, including child processes. Verify that they exited and no longer serve their task ports. Identify owned processes precisely; never use broad process-name kills or stop the user's or another task's processes.
+- Close every temporary browser tab, window, and browser session you opened. Quit a browser only if you launched that dedicated instance for the task. Preserve pre-existing user tabs, windows, and sessions.
+- Before finishing, inspect retained task worktrees in the repositories you used and check their live PR status. Remove worktrees whose PRs are merged, including worktrees retained from earlier tasks and review or synchronization worktrees for the same PR. Keep worktrees for unmerged PRs or ongoing work, unless their removal is separately authorized.
+- A squash merge can leave the original branch outside `master`'s ancestry. Confirm that the worktree's committed work is included in the merged PR; ancestry of the worktree head in the merged PR head is sufficient. If the history or inclusion is uncertain, preserve the commits in a verified recoverable backup before removing the worktree. This does not waive the separate ancestry requirement for deleting Git branches.
+- Before removing a worktree, preserve uncommitted edits, needed ignored files such as local environment files, and investigation artifacts in a private backup outside that worktree. Verify the backup before removal. Use the supported archive operation for managed worktrees and the repository's removal helpers otherwise. Do not discard another contributor's changes or delete the primary checkout.
+- This cleanup is preauthorized. Only an explicit user request to retain a resource overrides the applicable cleanup requirement. Verify that removed worktree paths and registrations are gone and retained worktrees are intact. If cleanup is blocked, report the specific blocker and remaining resources; do not silently leave them behind or claim completion.
 
 ## Validation
 
