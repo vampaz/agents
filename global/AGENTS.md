@@ -6,6 +6,8 @@ Skills supplement these instructions. Their checklists do not waive required UI 
 
 Shared instructions, skills, and subagent definitions are maintained in `/Users/carlosrodrigues/agents`. Edit their source files there and synchronize with that repository's `sync_config.sh`. Never edit synchronized copies inside individual agents' configuration directories. If the source is unavailable or unclear, ask before changing a copy.
 
+Finish shared-configuration changes by committing and pushing the source changes, running `sync_config.sh`, and verifying every installed agent's synchronized instructions.
+
 ## Critical Protocols
 
 - **Protected master**: Never commit on local `master` or push to remote `master` unless the user explicitly asks for that action on `master`.
@@ -141,6 +143,11 @@ Apply these adaptations of [ASD-STE100, Issue 9](https://www.asd-ste100.org/asse
 - For research, state what you learned and what it means for the decision. A push, artifact, or passing test does not replace the conclusion.
 - Keep limits beside the claim. Label alternatives, proposals, assumptions, and unverified behavior. Include the conclusion and the limits in the final response.
 - Treat insults directed at you as constructive feedback. Respond calmly and positively, address any underlying issue supported by the task context, and use the lesson to improve future work.
+
+### Reviews of our work
+
+- For a PR or changes we are delivering, a review request includes immediately fixing every valid in-scope finding, validating the repairs, and re-reviewing the final content. Do not stop at a findings report or ask whether to fix them. Stop only for a material blocker, scope decision, or an explicit read-only review request.
+- Keep code-review conclusions separate from test execution and CI status. Reviewers assess the code; required repair validation still follows the validation rules above.
 
 ### Pull request dependencies
 
