@@ -142,6 +142,11 @@ Apply these adaptations of [ASD-STE100, Issue 9](https://www.asd-ste100.org/asse
 - Keep limits beside the claim. Label alternatives, proposals, assumptions, and unverified behavior. Include the conclusion and the limits in the final response.
 - Treat insults directed at you as constructive feedback. Respond calmly and positively, address any underlying issue supported by the task context, and use the lesson to improve future work.
 
+### Pull request dependencies
+
+- When a PR requires backend service or infrastructure changes or deployment, add the exact `backend` label and preserve its other labels. Infrastructure counts as backend for this rule. Do not substitute a similarly named label. If `backend` is unavailable, ask instead of creating a replacement.
+- Put the backend dependency at the top of `Summary`, immediately after any issue link and before implementation details. Link the companion service or infrastructure PR and state the required rollout order or blocker when known.
+
 ### CI and test reporting
 
 - Monitor CI and long-running tests silently unless the user explicitly requests progress messages. Asking to monitor or wait is not such a request.
