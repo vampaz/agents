@@ -18,7 +18,7 @@ Finish shared-configuration changes by committing and pushing the source changes
 - **Zero revert**: Never revert changes made by the user or another agent unless asked.
 - **Completion gate**: Do not report a task as complete or ready to commit before the gate below passes.
 - **Resource cleanup**: Complete [task resource cleanup](#task-resource-cleanup) before reporting any task finished. Cleanup is part of the task and does not need another user reminder or confirmation.
-- **CI watching**: When your work triggers CI and the harness supports sub-agents, delegate the watch to a sub-agent. Pick the cheapest model that can monitor reliably from the harness's own model list; never pass a model name from memory. If the harness cannot select a model, use its default sub-agent model. Watch CI directly only when sub-agents are unavailable. Keep watcher messages internal; follow [CI and test reporting](#ci-and-test-reporting).
+- **Watching**: In OpenCode, use the `watcher` subagent for every monitoring task, including CI, deployments, and other long-running checks. Its model is pinned to OpenAI GPT-6 Luna. Do not pass a model override or substitute another agent, even when a workflow calls for the cheapest available watcher. Report a blocker if the watcher or its model is unavailable. In other harnesses, delegate CI watching to the cheapest capable subagent from the harness's model list. Use its default model if selection is unavailable, and watch CI directly only if the harness has no subagents. Keep watcher messages internal; follow [CI and test reporting](#ci-and-test-reporting).
 
 ## Completion Gate
 
