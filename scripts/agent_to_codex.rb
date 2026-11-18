@@ -6,6 +6,7 @@
 # Codex reads standalone TOML agents from ~/.codex/agents/. Each file needs
 # name, description, and developer_instructions. The model comes from the codex
 # pin in agents/models.yml. Codex receives only the agents that have that pin.
+# A pin such as gpt-6-luna#medium also sets the reasoning effort.
 #
 # A Codex custom agent inherits the parent's sandbox and approvals, so deny
 # rules become instructions instead of enforced permissions.
@@ -89,12 +90,16 @@ name = File.basename(source, '.md')
 description = frontmatter['description'].to_s
 abort("#{source}: the description field is required") if description.strip.empty?
 
-model = load_pins(File.dirname(source)).dig(name, 'codex')
-abort("#{source}: no codex model in models.yml") if model.nil? || model.to_s.strip.empty?
+pin = load_pins(File.dirname(source)).dig(name, 'codex')
+abort("#{source}: no codex model in models.yml") if pin.nil? || pin.to_s.strip.empty?
+
+model, effort = pin.to_s.split('#', 2)
+abort("#{source}: the codex pin has an empty reasoning effort") if effort&.strip&.empty?
 
 instructions = [match[2].strip, *denied_instructions(frontmatter, source)].join("\n\n")
 
 print "name = #{toml_string(name)}\n"
 print "description = #{toml_string(description)}\n"
 print "model = #{toml_string(model)}\n"
+print "model_reasoning_effort = #{toml_string(effort)}\n" if effort
 print "developer_instructions = #{toml_string(instructions)}\n"
