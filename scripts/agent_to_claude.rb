@@ -17,6 +17,7 @@
 #
 # Claude Code uses a different schema: name and description are required, tool
 # access is expressed with tools/disallowedTools, and model is a family alias.
+# A claude pin in agents/models.yml replaces the alias derived from the model.
 #
 # Usage: agent_to_claude.rb <agent.md>
 # Writes the converted definition to stdout.
@@ -129,7 +130,9 @@ converted = {
 tools = denied_tools(frontmatter, source)
 converted['disallowedTools'] = tools.join(', ') unless tools.empty?
 
-model = claude_model_alias(frontmatter['model'])
+pins_file = File.join(File.dirname(source), 'models.yml')
+pins = File.exist?(pins_file) ? (load_frontmatter(File.read(pins_file)) || {}) : {}
+model = pins.dig(name, 'claude') || claude_model_alias(frontmatter['model'])
 converted['model'] = model if model
 
 # Psych emits a YAML document start marker. The agent file needs the frontmatter

@@ -21,7 +21,7 @@ This repository is the single source of truth for the shared agent configuration
 | --- | --- | --- |
 | `global/AGENTS.md` | Shared instructions | The `AGENTS.md` or `CLAUDE.md` file of every installed agent |
 | `skills/` | Skills | The `skills/` folder of every installed agent |
-| `agents/` | Subagent definitions | The `agents/` folder of OpenCode and Claude Code |
+| `agents/` | Subagent definitions | The `agents/` folder of OpenCode, Claude Code, and Codex |
 | `scripts/` | Helpers used by `sync_config.sh` | Not synced |
 
 Never edit the copies inside the agent configuration folders. Edit the source here and run `sync_config.sh`.
@@ -34,4 +34,4 @@ After editing a shared file, verify the sync:
 
 ## Subagent Definitions
 
-The definitions in `agents/` use the OpenCode V2 format. `sync_config.sh` copies them unchanged to OpenCode and converts them to the Claude Code format with `scripts/agent_to_claude.rb`. Codex, pi, omp, and dsh have no markdown subagent folder, so the script skips them.
+The definitions in `agents/` use the OpenCode V2 format. `sync_config.sh` copies them unchanged to OpenCode and converts them to the Claude Code format with `scripts/agent_to_claude.rb`. `agents/models.yml` pins models for harnesses that do not use OpenCode model names. Codex receives only the agents with a `codex` pin, converted to TOML with `scripts/agent_to_codex.rb`. pi, omp, and dsh have no subagent folder, so the script skips them.

@@ -106,9 +106,60 @@ AGENT_SUBDIR_DIRS=(
   "$HOME/.claude/agents|convert"
 )
 
-# Installed agents that have no markdown subagent directory.
+# Codex reads TOML custom agents and receives only the agents that
+# agents/models.yml pins to a Codex model.
+sync_codex_agents() {
+  local SOURCE_DIR="$1"
+  local DEST_DIR="$2"
+  local MANIFEST_FILE="$DEST_DIR/.sync_agents_manifest"
+  local AGENT_NAMES
+
+  if ! AGENT_NAMES="$(ruby "$BASE_DIR/scripts/agent_to_codex.rb" --list "$SOURCE_DIR")"; then
+    echo "  failed to read the Codex model pins" >&2
+    return 1
+  fi
+
+  mkdir -p "$DEST_DIR"
+
+  if [ -f "$MANIFEST_FILE" ]; then
+    while IFS= read -r AGENT_FILE; do
+      if ! is_safe_entry_name "$AGENT_FILE"; then
+        echo "Skipping unsafe manifest entry: $AGENT_FILE"
+        continue
+      fi
+
+      if ! printf '%s\n' "$AGENT_NAMES" | grep -qxF "${AGENT_FILE%.toml}"; then
+        rm -f -- "$DEST_DIR/$AGENT_FILE"
+      fi
+    done < "$MANIFEST_FILE"
+  fi
+
+  : > "$MANIFEST_FILE"
+
+  while IFS= read -r AGENT_NAME; do
+    [ -n "$AGENT_NAME" ] || continue
+
+    if ! is_safe_entry_name "$AGENT_NAME" || [ ! -f "$SOURCE_DIR/$AGENT_NAME.md" ]; then
+      echo "  skipped Codex pin for $AGENT_NAME (no agents/$AGENT_NAME.md)" >&2
+      continue
+    fi
+
+    echo "$AGENT_NAME.toml" >> "$MANIFEST_FILE"
+    TEMP_FILE="$(mktemp "$DEST_DIR/.agent_sync.XXXXXX")"
+
+    if ! ruby "$BASE_DIR/scripts/agent_to_codex.rb" "$SOURCE_DIR/$AGENT_NAME.md" > "$TEMP_FILE"; then
+      echo "  failed to convert $AGENT_NAME.md" >&2
+      rm -f -- "$TEMP_FILE"
+      continue
+    fi
+
+    mv -f -- "$TEMP_FILE" "$DEST_DIR/$AGENT_NAME.toml"
+    echo "  synced ${DEST_DIR%/}/$AGENT_NAME.toml"
+  done <<< "$AGENT_NAMES"
+}
+
+# Installed agents that have no subagent directory.
 AGENTS_WITHOUT_SUBDIRS=(
-  "$HOME/.codex|codex"
   "$HOME/.pi/agent|pi"
   "$HOME/.omp/agent|omp"
   "$HOME/.dsh|dsh"
@@ -138,6 +189,15 @@ sync_agents() {
     echo "Syncing agents to $AGENT_SUBDIR_DIR..."
     sync_agent_files "$SOURCE_DIR" "$AGENT_SUBDIR_DIR" "$AGENT_SUBDIR_MODE"
   done
+
+  if [ -d "$HOME/.codex" ]; then
+    if command -v ruby >/dev/null 2>&1; then
+      echo "Syncing agents to $HOME/.codex/agents..."
+      sync_codex_agents "$SOURCE_DIR" "$HOME/.codex/agents"
+    else
+      echo "  skipped $HOME/.codex/agents (ruby is not installed)"
+    fi
+  fi
 
   for ENTRY in "${AGENTS_WITHOUT_SUBDIRS[@]}"; do
     AGENT_HOME="${ENTRY%%|*}"

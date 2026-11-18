@@ -1,0 +1,7 @@
+# Model pins for harnesses that do not use OpenCode model names.
+# OpenCode uses the model in each agent's frontmatter.
+# Claude Code accepts a model alias such as haiku, sonnet, or opus.
+# Codex receives only the agents that have a codex model here.
+watcher:
+  claude: haiku
+  codex: gpt-6-luna
