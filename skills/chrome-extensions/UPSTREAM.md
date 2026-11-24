@@ -1,9 +1,9 @@
 # Upstream source
 
 - Source: [GoogleChrome/modern-web-guidance](https://github.com/GoogleChrome/modern-web-guidance), `skills/chrome-extensions`.
-- Package: `modern-web-guidance@1.0.0`.
+- Package: `modern-web-guidance@1.0.2`.
 - Skill version: `2026_08_06-8570fe7c`.
-- Updated on: 2026-11-11.
+- Updated on: 2026-11-24.
 - License: [Apache-2.0](LICENSE).
 
 `SKILL.md`, `references/`, and `skill-version.txt` are copied unchanged. The skill is part of the Modern Web Guidance package but is installed separately because it covers Chrome extension development and Web Store publishing rather than web page guidance.

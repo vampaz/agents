@@ -27,5 +27,5 @@ Run `./scripts/verify.sh` to check script syntax, run unit tests (`scripts/scrip
 | `build-webmcp-tools` | [UPSTREAM.md](skills/build-webmcp-tools/UPSTREAM.md) (GoogleChromeLabs/webmcp-tools) | Manual copy from reviewed revision |
 | `modern-web-guidance` | [UPSTREAM.md](skills/modern-web-guidance/UPSTREAM.md) (GoogleChrome/modern-web-guidance) | `scripts/update-modern-web-guidance.sh` |
 | `chrome-extensions` | [UPSTREAM.md](skills/chrome-extensions/UPSTREAM.md) (GoogleChrome/modern-web-guidance) | `scripts/update-modern-web-guidance.sh` |
-| `cloudflare`, `agents-sdk`, `durable-objects`, `workers-best-practices`, `wrangler` | Cloudflare skills suite | Refresh from upstream Cloudflare skills |
-| `typesafe-ai`, `ui-design`, `ux` | External reference skills | Refresh manually as needed |
+| `cloudflare`, `agents-sdk`, `durable-objects`, `workers-best-practices` | [cloudflare/skills](https://github.com/cloudflare/skills) (`UPSTREAM.md` per skill) | `scripts/update-cloudflare-skills.sh` |
+| `typesafe-ai`, `ux` | External reference skills | Refresh manually as needed |
