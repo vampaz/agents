@@ -1,471 +1,69 @@
 ---
 name: security-review
-description: Ensure code follows security best practices and identify potential vulnerabilities.
+description: Ensure code follows web, TypeScript, Vue, and Cloudflare Workers security best practices and identify concrete vulnerabilities.
 ---
 
-This skill ensures all code follows security best practices and identifies potential vulnerabilities.
+# Security Review
+
+Use this skill when implementing or reviewing authentication, authorization, untrusted input, file uploads, HTML rendering, API endpoints, Cloudflare Workers bindings/secrets, cookies, CORS, or third-party integrations.
 
 For browser security guidance, use the `modern-web-guidance` skill to retrieve the relevant security guide when reviewing DOM injection, CSP, Trusted Types, cookies, cross-origin messaging, or passkeys.
 
-## When to Activate
-
-- Implementing authentication or authorization
-- Handling user input or file uploads
-- Creating new API endpoints
-- Working with secrets or credentials
-- Implementing payment features
-- Storing or transmitting sensitive data
-- Integrating third-party APIs
-
 ## Security Checklist
 
-### 1. Secrets Management
+### 1. Secrets and Configuration
 
-#### NEVER Do This
-
-```typescript
-const apiKey = 'sk-proj-xxxxx'
-const dbPassword = 'password123'
-```
-
-#### ALWAYS Do This
+- Never hardcode API keys, tokens, signing keys, or credentials in source files, tests, or `wrangler.jsonc`.
+- Load secrets from environment bindings (`env.SECRET_NAME` in Cloudflare Workers) or secret stores, and fail fast when a required secret is missing.
+- Keep `.env*` and `.dev.vars` ignored by git; check the diff for accidental credentials before committing.
+- Never log secrets, authorization headers, cookies, session tokens, or full payment/PII payloads.
 
 ```typescript
-const apiKey = process.env.OPENAI_API_KEY
-const dbUrl = process.env.DATABASE_URL
+// BAD: leaks credentials into logs and exposes stack traces to clients
+console.log('Login attempt', { email, password, authHeader })
+return Response.json({ error: err.message, stack: err.stack }, { status: 500 })
 
-if (!apiKey) {
-  throw new Error('OPENAI_API_KEY not configured')
-}
+// GOOD: log non-sensitive identifiers server-side and return generic errors
+console.error('Login failed', { userId, requestId })
+return Response.json({ error: 'Internal server error' }, { status: 500 })
 ```
 
-#### Verification Steps
+### 2. Input Validation and Parsing
 
-- No hardcoded API keys, tokens, or passwords
-- All secrets in environment variables
-- .env.local in .gitignore
-- No secrets in git history
-- Production secrets in hosting platform (Vercel, Railway)
+- Validate all untrusted input (request params, query strings, JSON bodies, headers, webhooks, file uploads) at the boundary with an explicit schema or strict allowlist before using it.
+- Enforce size limits on request bodies and uploads; check MIME type, file signature/content, and safe filename handling when accepting files.
+- Guard against prototype pollution (`__proto__`, `constructor`, `prototype`) when indexing objects with untrusted keys—prefer `Map` or `Object.create(null)`.
 
-### 2. Input Validation
+### 3. Injection Prevention (SQL, Command, SSRF, Path Traversal)
 
-#### Always Validate User Input
+- **SQL / D1**: Always use parameterized queries (`env.DB.prepare('SELECT ... WHERE id = ?').bind(id)`). Never interpolate untrusted values into SQL strings.
+- **Shell / Subprocess**: Never interpolate untrusted input into shell commands. Pass argument arrays (`execFile`, `spawn` without `shell: true`) and validate paths/names strictly.
+- **SSRF**: Validate user-supplied URLs (scheme allowlist `https:`, reject private/loopback/link-local hosts and unexpected redirects) before fetching server-side.
+- **Paths**: Canonicalize paths and verify they stay inside the intended root directory before reading or writing.
 
-```typescript
-import { z } from 'zod'
+### 4. Authentication, Authorization, and Sessions
 
-const CreateUserSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(1).max(100),
-  age: z.number().int().min(0).max(150)
-})
+- Verify authentication and object-level authorization (`ownerId === session.userId` or explicit role check) on every mutating or private endpoint—never rely on client-side route guards alone.
+- Verify webhook and JWT signatures with constant-time comparison and validate `iss`, `aud`, `exp`, and `alg` explicitly.
+- Store session tokens in `HttpOnly; Secure` cookies (not `localStorage`). Match `SameSite` (`Lax` or `Strict`) to the login and embedding flows.
 
-export async function createUser(input: unknown) {
-  try {
-    const validated = CreateUserSchema.parse(input)
-    return await db.users.create(validated)
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return { success: false, errors: error.errors }
-    }
-    throw error
-  }
-}
-```
+### 5. XSS, Vue Templates, and CSP
 
-#### File Upload Validation
+- In Vue components, avoid `v-html` on untrusted or user-derived content. When rendering rich HTML is required, sanitize with a maintained sanitizer using an explicit tag/attribute allowlist.
+- Never bind unvalidated URLs to `href`, `src`, or `action` without checking for `http:`/`https:` (reject `javascript:` and untrusted `data:` URIs).
+- Inspect existing headers, inline scripts, and third-party origins before defining or tightening `Content-Security-Policy`; prefer nonces or hashes over `'unsafe-inline'` and `'unsafe-eval'`.
 
-```typescript
-function validateFileUpload(file: File) {
-  const maxSize = 5 * 1024 * 1024
-  if (file.size > maxSize) {
-    throw new Error('File too large (max 5MB)')
-  }
+### 6. CSRF, CORS, and Rate Limiting
 
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
-  if (!allowedTypes.includes(file.type)) {
-    throw new Error('Invalid file type')
-  }
+- Protect state-changing cookie-authenticated endpoints against CSRF (explicit CSRF token or verified `Origin`/`Sec-Fetch-Site` check); do not assume CORS alone prevents CSRF.
+- Never combine `Access-Control-Allow-Credentials: true` with a wildcard or blindly echoed `Origin` header; validate against an explicit allowlist.
+- Rate-limit authentication, search, AI inference, and other expensive endpoints (e.g., Cloudflare Rate Limiting rules or Durable Object/Worker limiters).
 
-  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif']
-  const extension = file.name.toLowerCase().match(/\.[^.]+$/)?.[0]
-  if (!extension || !allowedExtensions.includes(extension)) {
-    throw new Error('Invalid file extension')
-  }
+### 7. Dependencies and Supply Chain
 
-  return true
-}
-```
+- Check `npm audit` and review transitive dependencies, install scripts, and licenses before adding packages (use the `select-dependencies` skill for new dependencies).
+- Commit lockfiles (`package-lock.json` / `pnpm-lock.yaml`) and pin GitHub Actions to full commit SHAs with minimal token permissions.
 
-#### Verification Steps
+## Output
 
-- All user inputs validated with schemas
-- File uploads restricted (size, type, extension)
-- No direct use of user input in queries
-- Whitelist validation (not blacklist)
-- Error messages do not leak sensitive info
-
-### 3. SQL Injection Prevention
-
-#### NEVER Concatenate SQL
-
-```typescript
-const query = `SELECT * FROM users WHERE email = '${userEmail}'`
-await db.query(query)
-```
-
-#### ALWAYS Use Parameterized Queries
-
-```typescript
-const { data } = await supabase
-  .from('users')
-  .select('*')
-  .eq('email', userEmail)
-
-await db.query(
-  'SELECT * FROM users WHERE email = $1',
-  [userEmail]
-)
-```
-
-#### Verification Steps
-
-- All database queries use parameterized queries
-- No string concatenation in SQL
-- ORM or query builder used correctly
-- Supabase queries properly sanitized
-
-### 4. Authentication and Authorization
-
-#### JWT Token Handling
-
-```typescript
-res.setHeader(
-  'Set-Cookie',
-  `token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=3600`
-)
-```
-
-#### Authorization Checks
-
-```typescript
-export async function deleteUser(userId: string, requesterId: string) {
-  const requester = await db.users.findUnique({
-    where: { id: requesterId }
-  })
-
-  if (requester.role !== 'admin') {
-    return NextResponse.json(
-      { error: 'Unauthorized' },
-      { status: 403 }
-    )
-  }
-
-  await db.users.delete({ where: { id: userId } })
-}
-```
-
-#### Row Level Security (Supabase)
-
-```sql
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users view own data"
-  ON users FOR SELECT
-  USING (auth.uid() = id);
-
-CREATE POLICY "Users update own data"
-  ON users FOR UPDATE
-  USING (auth.uid() = id);
-```
-
-#### Verification Steps
-
-- Tokens stored in httpOnly cookies (not localStorage)
-- Authorization checks before sensitive operations
-- Row Level Security enabled in Supabase
-- Role-based access control implemented
-- Session management secure
-
-### 5. XSS Prevention
-
-#### Sanitize HTML
-
-```typescript
-import DOMPurify from 'isomorphic-dompurify'
-
-function renderUserContent(html: string) {
-  const clean = DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p'],
-    ALLOWED_ATTR: []
-  })
-  return <div dangerouslySetInnerHTML={{ __html: clean }} />
-}
-```
-
-#### Content Security Policy
-
-Inspect the application's existing headers, inline scripts, and third-party integrations before defining a policy. Prefer script nonces or hashes over broad `'unsafe-inline'` and `'unsafe-eval'` exceptions. For existing applications, retrieve the `security` and `trusted-types` guides with the `modern-web-guidance` skill before tightening enforcement.
-
-#### Verification Steps
-
-- User-provided HTML sanitized
-- CSP headers configured
-- No unvalidated dynamic content rendering
-- React built-in XSS protection used
-
-### 6. CSRF Protection
-
-#### CSRF Tokens
-
-```typescript
-import { csrf } from '@/lib/csrf'
-
-export async function POST(request: Request) {
-  const token = request.headers.get('X-CSRF-Token')
-
-  if (!csrf.verify(token)) {
-    return NextResponse.json(
-      { error: 'Invalid CSRF token' },
-      { status: 403 }
-    )
-  }
-}
-```
-
-#### SameSite Cookies
-
-```typescript
-res.setHeader(
-  'Set-Cookie',
-  `session=${sessionId}; HttpOnly; Secure; SameSite=Strict`
-)
-```
-
-#### Verification Steps
-
-- CSRF tokens on state-changing operations
-- SameSite matches the authentication and embedding flows; use Strict only where cross-site entry does not need the cookie
-- The application's chosen CSRF defense is verified; SameSite and CORS alone do not replace it
-
-### 7. Rate Limiting
-
-#### API Rate Limiting
-
-```typescript
-import rateLimit from 'express-rate-limit'
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  message: 'Too many requests'
-})
-
-app.use('/api/', limiter)
-```
-
-#### Expensive Operations
-
-```typescript
-const searchLimiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 10,
-  message: 'Too many search requests'
-})
-
-app.use('/api/search', searchLimiter)
-```
-
-#### Verification Steps
-
-- Rate limiting on all API endpoints
-- Stricter limits on expensive operations
-- IP-based rate limiting
-- User-based rate limiting (authenticated)
-
-### 8. Sensitive Data Exposure
-
-#### Logging
-
-```typescript
-console.log('User login:', { email, password })
-console.log('Payment:', { cardNumber, cvv })
-
-console.log('User login:', { email, userId })
-console.log('Payment:', { last4: card.last4, userId })
-```
-
-#### Error Messages
-
-```typescript
-catch (error) {
-  return NextResponse.json(
-    { error: error.message, stack: error.stack },
-    { status: 500 }
-  )
-}
-
-catch (error) {
-  console.error('Internal error:', error)
-  return NextResponse.json(
-    { error: 'An error occurred. Please try again.' },
-    { status: 500 }
-  )
-}
-```
-
-#### Verification Steps
-
-- No passwords, tokens, or secrets in logs
-- Error messages generic for users
-- Detailed errors only in server logs
-- No stack traces exposed to users
-
-### 9. Blockchain Security (Solana)
-
-#### Wallet Verification
-
-```typescript
-import { verify } from '@solana/web3.js'
-
-async function verifyWalletOwnership(
-  publicKey: string,
-  signature: string,
-  message: string
-) {
-  try {
-    const isValid = verify(
-      Buffer.from(message),
-      Buffer.from(signature, 'base64'),
-      Buffer.from(publicKey, 'base64')
-    )
-    return isValid
-  } catch (error) {
-    return false
-  }
-}
-```
-
-#### Transaction Verification
-
-```typescript
-async function verifyTransaction(transaction: Transaction) {
-  if (transaction.to !== expectedRecipient) {
-    throw new Error('Invalid recipient')
-  }
-
-  if (transaction.amount > maxAmount) {
-    throw new Error('Amount exceeds limit')
-  }
-
-  const balance = await getBalance(transaction.from)
-  if (balance < transaction.amount) {
-    throw new Error('Insufficient balance')
-  }
-
-  return true
-}
-```
-
-#### Verification Steps
-
-- Wallet signatures verified
-- Transaction details validated
-- Balance checks before transactions
-- No blind transaction signing
-
-### 10. Dependency Security
-
-#### Regular Updates
-
-```bash
-npm audit
-npm audit fix
-npm update
-npm outdated
-```
-
-#### Lock Files
-
-```bash
-git add package-lock.json
-
-npm ci
-```
-
-#### Verification Steps
-
-- Dependencies up to date
-- No known vulnerabilities (npm audit clean)
-- Lock files committed
-- Dependabot enabled on GitHub
-- Regular security updates
-
-## Security Testing
-
-### Automated Security Tests
-
-```typescript
-test('requires authentication', async () => {
-  const response = await fetch('/api/protected')
-  expect(response.status).toBe(401)
-})
-
-test('requires admin role', async () => {
-  const response = await fetch('/api/admin', {
-    headers: { Authorization: `Bearer ${userToken}` }
-  })
-  expect(response.status).toBe(403)
-})
-
-test('rejects invalid input', async () => {
-  const response = await fetch('/api/users', {
-    method: 'POST',
-    body: JSON.stringify({ email: 'not-an-email' })
-  })
-  expect(response.status).toBe(400)
-})
-
-test('enforces rate limits', async () => {
-  const requests = Array(101).fill(null).map(() =>
-    fetch('/api/endpoint')
-  )
-
-  const responses = await Promise.all(requests)
-  const tooManyRequests = responses.filter(r => r.status === 429)
-
-  expect(tooManyRequests.length).toBeGreaterThan(0)
-})
-```
-
-## Pre-Deployment Security Checklist
-
-Before any production deployment:
-
-- Secrets: No hardcoded secrets, all in env vars
-- Input Validation: All user inputs validated
-- SQL Injection: All queries parameterized
-- XSS: User content sanitized
-- CSRF: Protection enabled
-- Authentication: Proper token handling
-- Authorization: Role checks in place
-- Rate Limiting: Enabled on all endpoints
-- HTTPS: Enforced in production
-- Security Headers: CSP, X-Frame-Options configured
-- Error Handling: No sensitive data in errors
-- Logging: No sensitive data logged
-- Dependencies: Up to date, no vulnerabilities
-- Row Level Security: Enabled in Supabase
-- CORS: Properly configured
-- File Uploads: Validated (size, type)
-- Wallet Signatures: Verified (if blockchain)
-
-## Resources
-
-- OWASP Top 10: https://owasp.org/www-project-top-ten/
-- Next.js Security: https://nextjs.org/docs/security
-- Supabase Security: https://supabase.com/docs/guides/auth
-- Web Security Academy: https://portswigger.net/web-security
-
-Remember: Security is not optional. One vulnerability can compromise the entire platform. When in doubt, err on the side of caution.
-
+Report findings ordered by severity/user impact with exact file/line references, concrete exploit or failure path, and minimal safe remediation. Separate verified issues from assumptions or checks not run.

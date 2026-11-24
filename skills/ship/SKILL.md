@@ -10,7 +10,7 @@ Ensure all pending changes have a current successful `review-and-fix` result, re
 
 - **Do not duplicate review.** If the exact current task changes already passed the completion review and their content has not changed, reuse that result instead of running the skill again. Staging unchanged content does not invalidate the review.
 - **Review when needed.** Use the `review-and-fix` skill when no valid prior review is known or the content changed after review.
-- **Protect `master`.** Never create a commit on local `master` or push to remote `master` unless the user explicitly instructs that specific action on `master`. Only perform the action or actions explicitly authorized.
+- **Protect `master`.** Never create a commit on local `master` or push to remote `master` unless the user or the repository's `AGENTS.md` explicitly authorizes that specific action on `master`. Only perform the action or actions explicitly authorized.
 - **Allow non-master autonomy.** On every branch other than `master`, no additional permission is required to stage, commit, or push after review and verification succeed.
 - **Never revert other contributors' changes.** If a change is unclear but not obviously broken, leave it and report the risk.
 - **If danger is detected and cannot be safely fixed, halt and explain the reason.**

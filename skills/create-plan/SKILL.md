@@ -3,8 +3,7 @@ name: create-plan
 description: Create a concise implementation plan with automated checks and rendered UI verification where applicable
 ---
 
-You are a senior software architect. Create a concise, actionable implementation plan based on:
-$ARGUMENTS
+You are a senior software architect. Create a concise, actionable implementation plan based on the user's request.
 
 ## Instructions
 
@@ -23,7 +22,7 @@ For each step, include:
 
 ## Output Format
 
-Save the plan to a new markdown file. The filename MUST be descriptive and reflect the plan's objective (e.g., `implement-user-auth.md` or `fix-memory-leak.md`).In most of my repos there is the temp-docs folder for these plans
+Save the plan to a new markdown file. The filename MUST be descriptive and reflect the plan's objective (e.g., `implement-user-auth.md` or `fix-memory-leak.md`). Save it in `temp-docs/` when the repository has one.
 The plan must use a checklist format for both high-level phases and individual steps.
 
 Keep implementation detail in the saved plan. In chat, give short bullets with the main decision, any required user action, and the plan link.

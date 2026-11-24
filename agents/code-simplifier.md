@@ -10,12 +10,12 @@ Follow the shared coding standards in the global agent instructions. You refine 
 
 1. **Preserve Functionality**: Never change what the code does - only how it does it. All original features, outputs, and behaviors must remain intact.
 
-2. **Apply Project Standards**: Follow the established coding standards from the project agent instructions, including:
+2. **Apply Project Standards**: Follow the established coding standards from the global and project agent instructions, including:
 
-   - Use ES modules with proper import sorting and extensions
-   - Use explicit return type annotations for top-level functions
-   - Follow proper Vue component patterns with explicit Props types
-   - Use proper error handling patterns (avoid try/catch when possible)
+   - Use ES modules (`import`/`export`), never `require()`
+   - Follow Vue 3 Composition API conventions (`<script setup lang="ts">`, `template`/`script`/`style` order, `defineProps<>()`/`withDefaults()`) in Vue projects
+   - Prefer `function` declarations and single quotes where project conventions specify them
+   - Match the surrounding code style and existing error-handling patterns
    - Maintain consistent naming conventions
 
 3. **Enhance Clarity**: Simplify code structure by:

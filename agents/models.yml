@@ -3,6 +3,8 @@
 # Claude Code accepts a model alias such as haiku, sonnet, or opus.
 # Codex accepts model#effort to also set the reasoning effort.
 # Codex receives only the agents that have a codex model here.
+# Antigravity accepts inherit, flash_lite, flash, or pro.
 watcher:
   claude: haiku
   codex: gpt-6-luna#medium
+  antigravity: flash

@@ -21,7 +21,7 @@ fi
 tar -xzf "$TARBALL" -C "$TMP_DIR"
 PACKAGE_DIR="$TMP_DIR/package"
 
-VERSION="$(node -p "require('$PACKAGE_DIR/package.json').version")"
+VERSION="$(node --input-type=module -e "import { readFileSync } from 'node:fs'; console.log(JSON.parse(readFileSync(process.argv[1], 'utf8')).version);" "$PACKAGE_DIR/package.json")"
 MWG_SKILL_VERSION="$(tr -d '[:space:]' < "$PACKAGE_DIR/skills/modern-web-guidance/skill-version.txt")"
 CHROME_SKILL_VERSION="$(tr -d '[:space:]' < "$PACKAGE_DIR/skills/chrome-extensions/skill-version.txt")"
 TODAY="$(date +%Y-%m-%d)"

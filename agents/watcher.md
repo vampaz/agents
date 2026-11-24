@@ -1,5 +1,5 @@
 ---
-description: OpenCode watcher for CI runs, deployments, and other long-running checks
+description: Watches CI runs, deployments, and other long-running checks
 mode: subagent
 model: openai/gpt-6-luna
 permissions:
