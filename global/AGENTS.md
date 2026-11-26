@@ -62,7 +62,8 @@ The test suite must be green before completion. Report what you ran and the resu
 - Most of our product work is web UI. When a task changes user-visible web behavior or asks for UI review, include both code and rendered UI review unless the user explicitly limits the scope.
 - Keep requested UI checks in the plan and any handoff or context summary until verified or reported blocked. Passing tests does not remove them.
 - Open the affected pages in the running application for the revision under review. Use the integrated browser when available. Inspect screenshots or the browser's visual output and exercise the changed flow. Source code, DOM snapshots, and passing tests alone do not verify appearance or usability.
-- Check desktop and narrow/mobile widths relevant to the task. Inspect affected layout, text, overflow, scrolling, controls, focus and keyboard use, and applicable loading, empty, error, and success states. Keep checks proportional to the change.
+- Check responsiveness at the viewport sizes the product supports. For Annex Reader, resize a desktop browser between narrow and wide desktop windows. Run phone or tablet checks and capture or share mobile screenshots only when the user explicitly requests them for Annex Reader.
+- Inspect affected layout, text, overflow, scrolling, controls, focus and keyboard use, and applicable loading, empty, error, and success states. Keep checks proportional to the change.
 - Report the pages, viewports, and states checked, the observed result, and any gaps. Link screenshots when useful.
 - If browser access or a runnable app is unavailable, finish independent checks and report the specific blocker and remaining UI review. Do not claim the UI passed or the task is complete.
 

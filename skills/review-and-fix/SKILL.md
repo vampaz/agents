@@ -52,7 +52,7 @@ Run the relevant targeted and broader validation required by the changed surface
 For web UI changes or an explicit UI-review request, apply the shared `AGENTS.md` UI checks unless the user explicitly limits the scope:
 
 - Open the affected pages for the revision under review in a browser. Visually inspect screenshots or rendered output and exercise the affected interactions. Code, DOM snapshots, and automated tests alone are insufficient.
-- Check relevant desktop and narrow/mobile widths, affected layout and scrolling, keyboard/focus behavior, and applicable loading, empty, error, and success states.
+- Choose viewports using the product's support policy and the shared `AGENTS.md` Web UI rules. Exercise the affected layout, scrolling, keyboard and focus behavior, and applicable loading, empty, error, and success states at those sizes.
 - Record the URL, viewports, states/actions checked, observed result, and remaining gaps. Capture screenshots when useful to substantiate findings.
 - If browser or app access is blocked, complete independent validation and report the blocker. The completion gate remains incomplete until the required UI review is performed.
 
